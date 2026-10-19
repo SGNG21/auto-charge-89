@@ -18,7 +18,7 @@ export function GET({ site }) {
     `- Téléphone : ${SITE.phone} — Email : ${SITE.email}`,
     `- Horaires : ${SITE.hours}`,
     `- Devis : gratuit, sans engagement, sous 48 h`,
-    `- Aides 2026 : TVA 5,5 % (particuliers, logement de plus de 2 ans, pose par un installateur IRVE) ; prime Advenir (projets collectifs) ; crédit d'impôt supprimé pour les dépenses payées depuis le 1er janvier 2026`,
+    `- Aides 2026 : prime Advenir (projets collectifs) ; crédit d'impôt supprimé pour les dépenses payées depuis le 1er janvier 2026`,
     '',
     '## Prestations',
     ...Object.values(SERVICES).map((s) => `- [${s.title}](${u(`/${s.slug}/`)}) : ${s.lead}`),
