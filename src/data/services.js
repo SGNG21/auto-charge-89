@@ -12,6 +12,7 @@ export const SERVICES = {
       'Recharge pilotée pour profiter des heures creuses',
       'Mise aux normes du tableau électrique si besoin',
       'Protection différentielle dédiée et circuit spécifique conforme NF C 15-100',
+      'TVA réduite à 5,5 % pour un logement de plus de deux ans',
     ],
   },
   copropriete: {
@@ -70,7 +71,7 @@ export const FAQ = [
   },
   {
     q: 'Quelles aides existent en 2026 pour une borne de recharge ?',
-    a: 'Pour les particuliers, le crédit d’impôt ne s’applique plus aux dépenses payées depuis le 1er janvier 2026. Les copropriétés, entreprises et collectivités peuvent bénéficier de la prime Advenir, qui finance une partie de l’installation selon le projet.',
+    a: 'En 2026, les particuliers bénéficient de la TVA réduite à 5,5 % sur la fourniture et la pose d’une borne par un installateur IRVE, dans un logement de plus de deux ans. Le crédit d’impôt ne s’applique plus aux dépenses payées depuis le 1er janvier 2026. Les copropriétés et entreprises peuvent bénéficier de la prime Advenir.',
   },
   {
     q: 'Faut-il changer mon abonnement électrique pour installer une borne ?',
@@ -90,6 +91,6 @@ export const FAQ = [
   },
   {
     q: 'Le devis est-il vraiment gratuit ?',
-    a: 'Oui. Le devis est gratuit et sans engagement, envoyé sous 48 heures après l’échange ou la visite technique. Il détaille le matériel, la main-d’œuvre, et les éventuels travaux sur le tableau électrique.',
+    a: 'Oui. Le devis est gratuit et sans engagement, envoyé sous 48 heures après l’échange ou la visite technique. Il détaille le matériel, la main-d’œuvre, les éventuels travaux sur le tableau et la TVA applicable.',
   },
 ];

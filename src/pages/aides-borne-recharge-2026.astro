@@ -5,8 +5,8 @@ import Faq from '../components/Faq.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 const crumbs = [{ name: 'Accueil', href: '/' }, { name: 'Aides 2026', href: '/aides-borne-recharge-2026/' }];
 const faq = [
-  { q: 'Le crédit d’impôt pour borne de recharge existe-t-il encore en 2026 ?', a: 'Non. Le crédit d’impôt pour l’installation d’une borne de recharge ne s’applique plus aux dépenses payées depuis le 1er janvier 2026.' },
-  { q: 'Quelle aide pour une borne en copropriété ?', a: 'La prime Advenir finance une partie de l’installation, qu’il s’agisse d’une infrastructure collective votée en assemblée générale ou, selon les conditions en vigueur, d’une borne individuelle. Nous montons le dossier avec vous.' },
+  { q: 'Le crédit d’impôt pour borne de recharge existe-t-il encore en 2026 ?', a: 'Non. Le crédit d’impôt pour l’installation d’une borne de recharge ne s’applique plus aux dépenses payées depuis le 1er janvier 2026. La TVA réduite à 5,5 % reste en revanche applicable.' },
+  { q: 'Quelles sont les conditions de la TVA à 5,5 % ?', a: 'La borne doit être installée dans un logement achevé depuis plus de deux ans, et la fourniture comme la pose doivent être facturées par l’installateur, qualifié IRVE. Le taux est appliqué directement sur la facture.' },
   { q: 'Un particulier en maison peut-il toucher la prime Advenir ?', a: 'Non. La prime Advenir est réservée aux projets collectifs : copropriétés, entreprises, flottes, parkings ouverts au public et collectivités, selon les catégories en vigueur.' },
   { q: 'Existe-t-il des aides locales dans l’Yonne ?', a: 'Des dispositifs ponctuels peuvent exister au niveau régional ou intercommunal, notamment pour les entreprises et les collectivités. Nous vérifions les aides mobilisables au moment du devis.' },
 ];
@@ -15,7 +15,7 @@ const schema = [
   { '@type': 'Article', headline: 'Aides pour une borne de recharge en 2026 dans l’Yonne', inLanguage: 'fr-FR', dateModified: new Date().toISOString().slice(0, 10), author: { '@id': new URL('/#entreprise', Astro.site).href }, publisher: { '@id': new URL('/#entreprise', Astro.site).href } },
 ];
 ---
-<Base title="Aides borne de recharge 2026 : prime Advenir, crédit d’impôt | Yonne" description="Quelles aides pour installer une borne de recharge en 2026 ? Prime Advenir pour copropriétés et entreprises, fin du crédit d’impôt. Le point clair par un installateur IRVE de l’Yonne." breadcrumbs={crumbs} schema={schema} type="article">
+<Base title="Aides borne de recharge 2026 : TVA 5,5 %, Advenir, crédit d’impôt | Yonne" description="Quelles aides pour installer une borne de recharge en 2026 ? TVA réduite à 5,5 %, prime Advenir pour copropriétés et entreprises, fin du crédit d’impôt. Le point clair par un installateur IRVE de l’Yonne." breadcrumbs={crumbs} schema={schema} type="article">
   <section class="pagetop">
     <div class="wrap">
       <Breadcrumbs items={crumbs} />
@@ -27,7 +27,7 @@ const schema = [
     <div class="wrap">
       <div class="sec-head"><span class="eyebrow">Ce à quoi vous avez droit</span><h2>On vous accompagne sur les démarches</h2><p>Les aides dépendent de votre projet. On vous oriente vers ce qui s’applique vraiment à votre situation.</p></div>
       <div class="aide-grid">
-        <div class="aide reveal"><div class="tag">Devis clair</div><h3>Un prix juste, sans surprise</h3><p>Visite technique sur place, puis un devis détaillé : matériel, main-d’œuvre, éventuels travaux sur le tableau. Ce qui est écrit est ce que vous payez.</p><div class="note">Gratuit et sans engagement, sous 48 h.</div></div>
+        <div class="aide reveal"><div class="tag">TVA 5,5 %</div><h3>Taux réduit sur la fourniture et la pose</h3><p>Sur l’achat et l’installation de votre borne dans un logement de plus de deux ans, à condition qu’elle soit posée par un professionnel certifié IRVE — c’est notre cas.</p><div class="note">Appliquée directement sur votre facture.</div></div>
         <div class="aide reveal"><div class="tag">Prime Advenir</div><h3>Pour les projets collectifs</h3><p>Financement d’une partie de l’installation en copropriété, entreprise ou collectivité. Le montant dépend de la catégorie du projet.</p><div class="note">Réservée aux installations collectives — pas la maison individuelle.</div></div>
         <div class="aide off reveal"><div class="tag">Crédit d’impôt</div><h3>Supprimé pour les dépenses 2026</h3><p>Le crédit d’impôt borne de recharge ne s’applique plus aux dépenses payées depuis le 1ᵉʳ janvier 2026.</p><div class="note">Ne vous fiez pas aux anciens simulateurs.</div></div>
       </div>
@@ -36,15 +36,15 @@ const schema = [
   </section>
   <section class="block">
     <div class="wrap prose">
-      <div class="answer"><span class="lbl">En bref</span><p>En 2026, le crédit d’impôt pour l’installation d’une borne de recharge n’existe plus pour les dépenses payées depuis le 1er janvier. L’aide principale est la prime Advenir, réservée aux copropriétés, entreprises, flottes et collectivités.</p></div>
+      <div class="answer"><span class="lbl">En bref</span><p>En 2026, un particulier qui fait installer une borne de recharge dans l’Yonne bénéficie de la TVA réduite à 5,5 % si son logement a plus de deux ans et que la pose est réalisée par un installateur IRVE. Le crédit d’impôt n’existe plus pour les dépenses de 2026. Les copropriétés et entreprises peuvent mobiliser la prime Advenir.</p></div>
       <h2>Récapitulatif par type de projet</h2>
       <div class="tbl-wrap"><table>
-        <thead><tr><th>Projet</th><th>Prime Advenir</th><th>Crédit d’impôt</th></tr></thead>
+        <thead><tr><th>Projet</th><th>TVA 5,5 %</th><th>Prime Advenir</th><th>Crédit d’impôt</th></tr></thead>
         <tbody>
-          <tr><td>Maison individuelle</td><td>Non</td><td>Non (depuis 2026)</td></tr>
-          <tr><td>Borne individuelle en copropriété</td><td>Selon le projet</td><td>Non (depuis 2026)</td></tr>
-          <tr><td>Infrastructure collective copropriété</td><td>Oui</td><td>—</td></tr>
-          <tr><td>Entreprise, flotte, parking public</td><td>Selon la catégorie</td><td>—</td></tr>
+          <tr><td>Maison individuelle (+ de 2 ans)</td><td>Oui</td><td>Non</td><td>Non (depuis 2026)</td></tr>
+          <tr><td>Borne individuelle en copropriété</td><td>Oui</td><td>Selon le projet</td><td>Non (depuis 2026)</td></tr>
+          <tr><td>Infrastructure collective copropriété</td><td>—</td><td>Oui</td><td>—</td></tr>
+          <tr><td>Entreprise, flotte, parking public</td><td>Non (TVA 20 %, récupérable)</td><td>Selon la catégorie</td><td>—</td></tr>
         </tbody>
       </table></div>
       <h2>Questions fréquentes sur les aides</h2>

@@ -32,7 +32,7 @@ function deBassin(s: string) {
   return /^[AEIOUÉÈ]/i.test(s) ? 'de l’' + s : 'du ' + s;
 }
 
-const answer =`AUTO CHARGE89 installe des bornes de recharge pour voitures électriques à ${city} (${c.cp}) et dans tout le secteur ${deBassin(c.bassinData.short)} : wallbox pour maison, bornes en copropriété et en entreprise. Électricien certifié IRVE niveaux 1 et 2, ${distanceTxt}. Devis gratuit sous 48 h.`;
+const answer =`AUTO CHARGE89 installe des bornes de recharge pour voitures électriques à ${city} (${c.cp}) et dans tout le secteur ${deBassin(c.bassinData.short)} : wallbox pour maison, bornes en copropriété et en entreprise. Électricien certifié IRVE niveaux 1 et 2, ${distanceTxt}. Devis gratuit sous 48 h, TVA à 5,5 % pour les particuliers éligibles.`;
 
 const typeTxt = {
   ville: pick([
@@ -56,8 +56,8 @@ const orderedServices = (['maison', 'copropriete', 'entreprise'] as const)
 
 const faq = [
   { q: `Combien de temps pour faire installer une borne de recharge à ${city} ?`, a: `Après votre demande, nous fixons une visite technique à ${city}, puis vous recevez le devis sous 48 h. La pose d’une wallbox en maison prend généralement une demi-journée à une journée.` },
-  { q: `Faut-il un électricien IRVE pour poser une borne à ${city} ?`, a: `Oui, dès 3,7 kW l’installation doit être réalisée par un professionnel qualifié IRVE. AUTO CHARGE89 est certifié IRVE niveaux 1 et 2 et intervient à ${city} (${c.cp}).` },
-  { q: `Quelles aides pour une borne de recharge à ${city} en 2026 ?`, a: `Pour les maisons individuelles, le crédit d’impôt ne s’applique plus aux dépenses payées depuis le 1er janvier 2026. Les copropriétés et entreprises de ${city} peuvent en revanche prétendre à la prime Advenir. Nous vérifions les aides mobilisables lors du devis.` },
+  { q: `Faut-il un électricien IRVE pour poser une borne à ${city} ?`, a: `Oui, dès 3,7 kW l’installation doit être réalisée par un professionnel qualifié IRVE, condition aussi pour bénéficier de la TVA à 5,5 %. AUTO CHARGE89 est certifié IRVE niveaux 1 et 2 et intervient à ${city} (${c.cp}).` },
+  { q: `Quelles aides pour une borne de recharge à ${city} en 2026 ?`, a: `Les particuliers de ${city} bénéficient de la TVA réduite à 5,5 % sur la borne et sa pose dans un logement de plus de deux ans. Le crédit d’impôt ne s’applique plus aux dépenses payées depuis le 1er janvier 2026. Les copropriétés et entreprises peuvent prétendre à la prime Advenir.` },
   { q: `Intervenez-vous aussi autour de ${city} ?`, a: `Oui, nous intervenons dans toutes les communes voisines, notamment ${near.slice(0, 4).map((n) => n.shortName).join(', ')}, et dans tout le département de l’Yonne.` },
 ];
 
@@ -101,7 +101,7 @@ const heroAlt = {
 ---
 <Base
   title={`Borne de recharge ${city} (${c.cp}) — Installateur IRVE | AUTO CHARGE89`}
-  description={`Installation de borne de recharge à ${city} (${c.cp}) : wallbox maison, copropriété, entreprise. Électricien certifié IRVE ${isBase ? 'basé à Brienon' : `à ${c.km} km`}, devis gratuit sous 48 h. ☎ ${SITE.phone}`}
+  description={`Installation de borne de recharge à ${city} (${c.cp}) : wallbox maison, copropriété, entreprise. Électricien certifié IRVE ${isBase ? 'basé à Brienon' : `à ${c.km} km`}, devis gratuit sous 48 h, TVA 5,5 %. ☎ ${SITE.phone}`}
   breadcrumbs={crumbs}
   schema={schema}
 >
@@ -118,7 +118,7 @@ const heroAlt = {
         <div class="fact"><b>{isBase ? 'Sur place' : `${c.km} km`}</b><span>{isBase ? 'Notre atelier est ici' : `de notre atelier (~${c.minutes} min)`}</span></div>
         <div class="fact"><b>IRVE</b><span>Certifié niveaux 1 et 2</span></div>
         <div class="fact"><b>48 h</b><span>Pour recevoir le devis</span></div>
-        <div class="fact"><b>7,4–22</b><span>kW selon votre besoin</span></div>
+        <div class="fact"><b>5,5 %</b><span>TVA réduite (particuliers)</span></div>
       </div>
     </div>
   </section>
@@ -146,7 +146,7 @@ const heroAlt = {
         <ol>
           <li><strong>Prise de contact</strong> : par téléphone au {SITE.phone} ou via le formulaire, on échange sur votre véhicule et votre logement.</li>
           <li><strong>Visite technique à {city}</strong> : contrôle du tableau électrique, de l’abonnement et de l’emplacement de la borne.</li>
-          <li><strong>Devis gratuit sous 48 h</strong> : clair, détaillé, avec les aides éventuelles.</li>
+          <li><strong>Devis gratuit sous 48 h</strong> : clair, détaillé, avec la TVA applicable et les aides éventuelles.</li>
           <li><strong>Pose et mise en service</strong> : installation conforme NF C 15-100, essai de charge et attestation de conformité.</li>
         </ol>
         <p>Pour aller plus loin : <a href="/aides-borne-recharge-2026/">les aides 2026 pour une borne de recharge</a> et <a href="/guide/quelle-puissance-borne-recharge/">quelle puissance de borne choisir</a>.</p>
