@@ -1,0 +1,191 @@
+---
+import Base from '../../layouts/Base.astro';
+import Photo from '../../components/Photo.astro';
+import Icon from '../../components/Icon.astro';
+import Faq from '../../components/Faq.astro';
+import Checks from '../../components/Checks.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import YonneMap from '../../components/YonneMap.astro';
+import ContactForm from '../../components/ContactForm.astro';
+import { SITE } from '../../data/site.js';
+import { SERVICES } from '../../data/services.js';
+import { COMMUNES, nearby, communeUrl } from '../../data/communes.js';
+
+export function getStaticPaths() {
+  return COMMUNES.map((c) => ({ params: { ville: c.slug }, props: { c } }));
+}
+const { c } = Astro.props as { c: (typeof COMMUNES)[number] };
+const isBase = c.slug === 'brienon-sur-armancon';
+const city = c.shortName;
+const near = nearby(c, 8);
+// Sélection déterministe de formulations pour varier les pages.
+const h = [...c.slug].reduce((a, ch) => (a * 31 + ch.charCodeAt(0)) >>> 0, 7);
+const pick = <T,>(arr: T[], salt = 0) => arr[(h + salt) % arr.length];
+
+const distanceTxt = isBase
+  ? 'notre atelier est sur place, à Brienon-sur-Armançon'
+  : `à environ ${c.km} km de notre atelier de Brienon-sur-Armançon (comptez ~${c.minutes} min de route)`;
+
+function deBassin(s: string) {
+  if (s === 'vignoble') return 'du vignoble auxerrois';
+  if (s.startsWith('vallée')) return 'de la ' + s;
+  return /^[AEIOUÉÈ]/i.test(s) ? 'de l’' + s : 'du ' + s;
+}
+
+const answer =`AUTO CHARGE89 installe des bornes de recharge pour voitures électriques à ${city} (${c.cp}) et dans tout le secteur ${deBassin(c.bassinData.short)} : wallbox pour maison, bornes en copropriété et en entreprise. Électricien certifié IRVE niveaux 1 et 2, ${distanceTxt}. Devis gratuit sous 48 h, TVA à 5,5 % pour les particuliers éligibles.`;
+
+const typeTxt = {
+  ville: pick([
+    `À ${city}, nous équipons autant les maisons des quartiers résidentiels que les parkings de copropriétés et les entreprises. En résidence, le droit à la prise permet d’installer votre borne sur votre place sans attendre un vote en assemblée générale.`,
+    `${city} concentre maisons, immeubles et zones d’activités : nos interventions vont de la wallbox de garage à l’équipement d’un parking de résidence ou d’une flotte de véhicules. Pour les appartements, nous accompagnons la démarche auprès du syndic.`,
+  ]),
+  bourg: pick([
+    `À ${city}, la plupart de nos clients sont des propriétaires de maisons avec garage, cour ou allée. Nous équipons aussi les commerces, artisans et petites entreprises qui veulent recharger leurs véhicules ou accueillir des clients en voiture électrique.`,
+    `Entre centre-bourg et lotissements, les installations à ${city} concernent surtout des maisons individuelles. Une borne de 7,4 kW suffit dans la grande majorité des cas pour recharger chaque nuit en heures creuses.`,
+  ]),
+  village: pick([
+    `À ${city}, on recharge surtout à la maison : une wallbox posée au garage ou en façade permet de repartir chaque matin batterie pleine, sans dépendre des bornes publiques des villes voisines.`,
+    `Dans un village comme ${city}, la borne à domicile est le moyen le plus simple et le plus économique de rouler électrique. Nous étudions la distance au tableau et la puissance de l’abonnement pour un devis au plus juste.`,
+    `Pour les habitants de ${city}, la recharge se fait d’abord chez soi. Une borne pilotée évite de changer d’abonnement et profite des heures creuses pour un coût au kilomètre très bas.`,
+  ]),
+}[c.type];
+
+const orderedServices = (['maison', 'copropriete', 'entreprise'] as const)
+  .slice()
+  .sort((a, b) => Number(c.bassinData.focus.includes(b)) - Number(c.bassinData.focus.includes(a)));
+
+const faq = [
+  { q: `Combien de temps pour faire installer une borne de recharge à ${city} ?`, a: `Après votre demande, nous fixons une visite technique à ${city}, puis vous recevez le devis sous 48 h. La pose d’une wallbox en maison prend généralement une demi-journée à une journée.` },
+  { q: `Faut-il un électricien IRVE pour poser une borne à ${city} ?`, a: `Oui, dès 3,7 kW l’installation doit être réalisée par un professionnel qualifié IRVE, condition aussi pour bénéficier de la TVA à 5,5 %. AUTO CHARGE89 est certifié IRVE niveaux 1 et 2 et intervient à ${city} (${c.cp}).` },
+  { q: `Quelles aides pour une borne de recharge à ${city} en 2026 ?`, a: `Les particuliers de ${city} bénéficient de la TVA réduite à 5,5 % sur la borne et sa pose dans un logement de plus de deux ans. Le crédit d’impôt ne s’applique plus aux dépenses payées depuis le 1er janvier 2026. Les copropriétés et entreprises peuvent prétendre à la prime Advenir.` },
+  { q: `Intervenez-vous aussi autour de ${city} ?`, a: `Oui, nous intervenons dans toutes les communes voisines, notamment ${near.slice(0, 4).map((n) => n.shortName).join(', ')}, et dans tout le département de l’Yonne.` },
+];
+
+const crumbs = [
+  { name: 'Accueil', href: '/' },
+  { name: 'Zones d’intervention', href: '/zones-intervention/' },
+  { name: city, href: communeUrl(c) },
+];
+const pageUrl = new URL(communeUrl(c), Astro.site).href;
+const schema = [
+  {
+    '@type': 'Service',
+    '@id': pageUrl + '#service',
+    name: `Installation de borne de recharge à ${city}`,
+    serviceType: 'Installation de borne de recharge pour véhicule électrique (IRVE)',
+    description: answer,
+    provider: { '@id': new URL('/#entreprise', Astro.site).href },
+    areaServed: {
+      '@type': 'City',
+      name: city,
+      postalCode: c.cp,
+      geo: { '@type': 'GeoCoordinates', latitude: c.lat, longitude: c.lon },
+      containedInPlace: { '@type': 'AdministrativeArea', name: 'Yonne', identifier: '89' },
+    },
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: `Bornes de recharge à ${city}`,
+      itemListElement: orderedServices.map((k) => ({ '@type': 'Offer', itemOffered: { '@type': 'Service', name: `${SERVICES[k].title} à ${city}` } })),
+    },
+    url: pageUrl,
+  },
+  { '@type': 'FAQPage', mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
+];
+const heroPhoto = pick(['photo-1', 'photo-9', 'photo-2', 'photo-11'], 3);
+const heroAlt = {
+  'photo-1': `Borne de recharge installée devant une maison, à ${city} et alentours`,
+  'photo-9': `Voiture électrique en charge dans l’allée d’une maison près de ${city}`,
+  'photo-2': `Wallbox murale posée par AUTO CHARGE89, secteur ${city}`,
+  'photo-11': `Borne de recharge allumée de nuit, installation dans l’Yonne près de ${city}`,
+}[heroPhoto]!;
+---
+<Base
+  title={`Borne de recharge ${city} (${c.cp}) — Installateur IRVE | AUTO CHARGE89`}
+  description={`Installation de borne de recharge à ${city} (${c.cp}) : wallbox maison, copropriété, entreprise. Électricien certifié IRVE ${isBase ? 'basé à Brienon' : `à ${c.km} km`}, devis gratuit sous 48 h, TVA 5,5 %. ☎ ${SITE.phone}`}
+  breadcrumbs={crumbs}
+  schema={schema}
+>
+  <section class="pagetop">
+    <div class="wrap">
+      <Breadcrumbs items={crumbs} />
+      <h1>Installation de borne de recharge à <span class="hl">{city}</span></h1>
+      <p class="lead">Wallbox pour maison, bornes en copropriété et en entreprise à {city} ({c.cp}) et dans le secteur {c.bassinData.name}. Artisan certifié IRVE, devis gratuit sous 48 h.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#devis">Devis gratuit à {city} <Icon name="arrow" /></a>
+        <a class="btn btn-ghost" href={`tel:${SITE.phoneIntl}`}><Icon name="phone" />{SITE.phone}</a>
+      </div>
+      <div class="facts" style="max-width:860px">
+        <div class="fact"><b>{isBase ? 'Sur place' : `${c.km} km`}</b><span>{isBase ? 'Notre atelier est ici' : `de notre atelier (~${c.minutes} min)`}</span></div>
+        <div class="fact"><b>IRVE</b><span>Certifié niveaux 1 et 2</span></div>
+        <div class="fact"><b>48 h</b><span>Pour recevoir le devis</span></div>
+        <div class="fact"><b>5,5 %</b><span>TVA réduite (particuliers)</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap two">
+      <article class="prose">
+        <div class="answer"><span class="lbl">En bref</span><p>{answer}</p></div>
+        <h2>Votre borne de recharge à {city}</h2>
+        <p>{c.bassinData.intro}</p>
+        {c.note && <p><strong>À {city} :</strong> {c.note}</p>}
+        <p>{typeTxt}</p>
+        <Photo name={heroPhoto} alt={heroAlt} sizes="(max-width: 900px) 100vw, 55vw" />
+
+        <h2>Nos solutions à {city}</h2>
+        {orderedServices.map((k) => (
+          <>
+            <h3><a href={`/${SERVICES[k].slug}/`} style="text-decoration:none;color:inherit">{SERVICES[k].short} à {city}</a></h3>
+            <p>{SERVICES[k].lead}</p>
+            <Checks items={SERVICES[k].points.slice(0, 3)} />
+          </>
+        ))}
+
+        <h2>Comment se déroule l’installation à {city} ?</h2>
+        <ol>
+          <li><strong>Prise de contact</strong> : par téléphone au {SITE.phone} ou via le formulaire, on échange sur votre véhicule et votre logement.</li>
+          <li><strong>Visite technique à {city}</strong> : contrôle du tableau électrique, de l’abonnement et de l’emplacement de la borne.</li>
+          <li><strong>Devis gratuit sous 48 h</strong> : clair, détaillé, avec la TVA applicable et les aides éventuelles.</li>
+          <li><strong>Pose et mise en service</strong> : installation conforme NF C 15-100, essai de charge et attestation de conformité.</li>
+        </ol>
+        <p>Pour aller plus loin : <a href="/aides-borne-recharge-2026/">les aides 2026 pour une borne de recharge</a> et <a href="/guide/quelle-puissance-borne-recharge/">quelle puissance de borne choisir</a>.</p>
+      </article>
+      <aside class="side">
+        <YonneMap current={c.slug} />
+        <div class="side-card">
+          <h2>Un projet à {city} ?</h2>
+          <p>Appelez-nous directement, on vous répond du lundi au samedi.</p>
+          <a class="btn btn-primary" href={`tel:${SITE.phoneIntl}`}><Icon name="phone" />{SITE.phone}</a>
+          <a class="btn btn-ghost" href="#devis">Formulaire de devis</a>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="block alt">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">Questions fréquentes</span><h2>Borne de recharge à {city} : vos questions</h2></div>
+      <Faq items={faq} />
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap cgrid">
+      <div class="zone">
+        <span class="eyebrow">Autour de {city}</span>
+        <h2>Nous intervenons aussi à proximité</h2>
+        <p>Depuis Brienon-sur-Armançon, nous installons des bornes de recharge dans les communes voisines de {city} :</p>
+        <ul class="chips">
+          {near.map((n) => <li><a href={communeUrl(n)}>{n.shortName} <small style="color:var(--ink-soft)">· {n.fromKm} km</small></a></li>)}
+        </ul>
+        <div class="direct">
+          <a href={`tel:${SITE.phoneIntl}`}><Icon name="phone" />{SITE.phone}</a>
+          <a href={`mailto:${SITE.email}`}><Icon name="mail" />{SITE.email}</a>
+        </div>
+        <p style="margin-top:22px"><a class="btn btn-line" href="/zones-intervention/">Toutes nos zones d’intervention</a></p>
+      </div>
+      <ContactForm city={city} heading={`Devis gratuit à ${city}`} />
+    </div>
+  </section>
+</Base>

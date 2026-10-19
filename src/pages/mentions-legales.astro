@@ -1,0 +1,20 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../data/site.js';
+---
+<Base title="Mentions légales | AUTO CHARGE89" description="Mentions légales du site AUTO CHARGE89, installateur de bornes de recharge à Brienon-sur-Armançon (Yonne)." noindex>
+  <section class="pagetop"><div class="wrap"><h1>Mentions légales</h1></div></section>
+  <section class="block"><div class="wrap prose">
+    <h2>Éditeur du site</h2>
+    <p>{SITE.legalName} — entreprise d’installation de bornes de recharge pour véhicules électriques.<br />
+    Siège : {SITE.city}, {SITE.postalCode} ({SITE.department}), France.<br />
+    SIRET : <em>à compléter</em> — Responsable de la publication : <em>à compléter</em>.<br />
+    Téléphone : <a href={`tel:${SITE.phoneIntl}`}>{SITE.phone}</a> — Email : <a href={`mailto:${SITE.email}`}>{SITE.email}</a></p>
+    <h2>Hébergement</h2>
+    <p>Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, États-Unis — vercel.com.</p>
+    <h2>Propriété intellectuelle</h2>
+    <p>L’ensemble des contenus de ce site (textes, photos, logo) est la propriété de {SITE.legalName}, sauf mention contraire. Toute reproduction sans autorisation est interdite.</p>
+    <h2>Responsabilité</h2>
+    <p>Les informations sur les aides et la réglementation sont fournies à titre indicatif et peuvent évoluer. Seul le devis personnalisé engage l’entreprise.</p>
+  </div></section>
+</Base>

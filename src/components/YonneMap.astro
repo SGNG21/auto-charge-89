@@ -1,0 +1,43 @@
+---
+import { COMMUNES, communeUrl } from '../data/communes.js';
+import { SITE } from '../data/site.js';
+interface Props { current?: string }
+const { current } = Astro.props;
+// Projection équirectangulaire simple centrée sur l'Yonne.
+const B = { latMin: 47.36, latMax: 48.42, lonMin: 2.86, lonMax: 4.3 };
+const k = Math.cos((48 * Math.PI) / 180);
+const W = 520;
+const H = Math.round((W * (B.latMax - B.latMin)) / ((B.lonMax - B.lonMin) * k));
+const px = (lon: number) => ((lon - B.lonMin) / (B.lonMax - B.lonMin)) * W;
+const py = (lat: number) => ((B.latMax - lat) / (B.latMax - B.latMin)) * H;
+const kmPx = W / ((B.lonMax - B.lonMin) * k * 111.32);
+const base = { x: px(SITE.geo.lon), y: py(SITE.geo.lat) };
+---
+<div class="map-card">
+  <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="map-title">
+    <title id="map-title">Carte des villes de l’Yonne où AUTO CHARGE89 installe des bornes de recharge, depuis Brienon-sur-Armançon</title>
+    {[25, 50, 75].map((r) => (
+      <g>
+        <circle class="ring" cx={base.x} cy={base.y} r={r * kmPx} />
+        <text class="lbl" x={base.x + r * kmPx * 0.71 + 4} y={base.y - r * kmPx * 0.71} style="fill:#7e90a8;font-size:10px">{r} km</text>
+      </g>
+    ))}
+    {COMMUNES.map((c) => {
+      const x = px(c.lon), y = py(c.lat);
+      const isCur = c.slug === current;
+      const showLabel = isCur || c.type === 'ville';
+      return (
+        <a href={communeUrl(c)} aria-label={`Borne de recharge à ${c.shortName}`}>
+          <circle class={isCur ? 'cur' : 'dot'} cx={x} cy={y} r={isCur ? 7 : c.type === 'ville' ? 5 : 3.6} />
+          {showLabel && <text class="lbl" x={x + 8} y={y + 4} style={isCur ? 'fill:#fff;font-weight:700;font-size:13px' : ''}>{c.shortName}</text>}
+        </a>
+      );
+    })}
+    <circle class="base" cx={base.x} cy={base.y} r="8" />
+    <circle cx={base.x} cy={base.y} r="14" fill="none" stroke="#ED7D24" stroke-width="2" />
+  </svg>
+  <div class="map-legend">
+    <span><i style="background:#ED7D24"></i>Notre base : Brienon-sur-Armançon</span>
+    <span><i style="background:#5d7290"></i>Villes desservies (cliquables)</span>
+  </div>
+</div>

@@ -1,0 +1,14 @@
+---
+import Icon from './Icon.astro';
+import { SITE } from '../data/site.js';
+interface Props { title?: string; text?: string }
+const { title = 'Un projet de recharge ?', text = 'Devis gratuit et sans engagement, réponse sous 48 h.' } = Astro.props;
+---
+<div class="ctaband reveal">
+  <h2>{title}</h2>
+  <p>{text}</p>
+  <div class="cta-row">
+    <a class="btn btn-primary" href="/contact/">Demander mon devis <Icon name="arrow" /></a>
+    <a class="btn btn-ghost" href={`tel:${SITE.phoneIntl}`}><Icon name="phone" />{SITE.phone}</a>
+  </div>
+</div>

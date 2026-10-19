@@ -1,0 +1,199 @@
+---
+import Base from '../layouts/Base.astro';
+import Photo from '../components/Photo.astro';
+import Icon from '../components/Icon.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Faq from '../components/Faq.astro';
+import Checks from '../components/Checks.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { SITE } from '../data/site.js';
+import { SERVICES, STEPS } from '../data/services.js';
+import { COMMUNES, communeUrl } from '../data/communes.js';
+
+const CONTENT = {
+  maison: {
+    metaTitle: 'Borne de recharge maison Yonne — Wallbox posée par un pro IRVE',
+    metaDesc: 'Installation de wallbox 7,4 ou 11 kW à domicile dans l’Yonne (89) : étude du tableau, recharge pilotée heures creuses, TVA 5,5 %. Artisan IRVE à Brienon-sur-Armançon. Devis gratuit.',
+    h1: ['Borne de recharge', 'pour votre maison'],
+    answer: 'Pour une maison dans l’Yonne, la solution la plus courante est une wallbox de 7,4 kW en monophasé, posée sur un circuit dédié par un électricien certifié IRVE. Elle recharge une voiture électrique en une nuit, en heures creuses, et bénéficie de la TVA à 5,5 % dans un logement de plus de deux ans.',
+    sections: [
+      { h: 'Pourquoi installer une wallbox plutôt qu’une prise classique ?', p: [
+        'Une prise domestique délivre environ 2,3 kW : il faut plus de 13 heures pour récupérer 30 kWh. Utilisée chaque nuit, elle chauffe et n’est pas conçue pour un courant fort pendant des heures. Une wallbox de 7,4 kW fait la même recharge en 4 à 5 heures, en toute sécurité, avec une protection différentielle adaptée aux véhicules électriques.',
+        'La borne communique avec la voiture, coupe la charge en cas de défaut et peut être programmée pour démarrer en heures creuses. C’est la solution recommandée par les constructeurs pour un usage quotidien.',
+      ] },
+      { h: 'Monophasé 7,4 kW ou triphasé 11 kW ?', p: [
+        'La grande majorité des maisons de l’Yonne sont en monophasé : la wallbox 7,4 kW est alors le bon choix et couvre largement 40 à 50 km d’autonomie récupérés par heure. Si votre maison est déjà en triphasé et que votre véhicule accepte 11 kW en courant alternatif, une borne 11 kW raccourcit encore la recharge.',
+        'Nous vérifions systématiquement votre puissance souscrite (6, 9 ou 12 kVA) et la capacité du tableau avant de conseiller une puissance : inutile de payer un abonnement plus cher si la borne pilotée suffit.',
+      ] },
+      { h: 'Ce que comprend notre installation', list: [
+        'Visite technique : tableau, compteur, emplacement, distance et cheminement du câble',
+        'Fourniture d’une borne de marque reconnue, compatible avec tous les véhicules (prise Type 2)',
+        'Création d’un circuit dédié, protection différentielle type A ou B selon la borne, disjoncteur adapté',
+        'Délestage / pilotage pour éviter les coupures et profiter des heures creuses',
+        'Mise en service, essai de charge avec votre véhicule et prise en main',
+        'Attestation de conformité et facture avec TVA 5,5 % le cas échéant',
+      ] },
+    ],
+    faq: [
+      { q: 'Où installer la borne : garage, façade ou abri ?', a: 'Idéalement au plus près de la place de stationnement et du tableau électrique, pour limiter la longueur de câble. Une borne peut être posée à l’extérieur (modèles IP54 ou plus), sur un mur ou sur pied.' },
+      { q: 'Ma maison est ancienne, est-ce un problème ?', a: 'Non. Dans l’habitat ancien de l’Yonne, il faut parfois remplacer ou compléter le tableau électrique. Nous l’indiquons clairement dans le devis après la visite technique.' },
+      { q: 'Puis-je recharger avec des panneaux solaires ?', a: 'Oui, certaines bornes savent prioriser la production photovoltaïque pour recharger avec votre propre électricité. Signalez-nous votre installation solaire lors de la demande.' },
+    ],
+  },
+  copropriete: {
+    metaTitle: 'Borne de recharge copropriété Yonne — Droit à la prise & Advenir',
+    metaDesc: 'Installation de bornes de recharge en copropriété dans l’Yonne : borne individuelle (droit à la prise) ou infrastructure collective, prime Advenir, accompagnement syndic. Installateur IRVE.',
+    h1: ['Borne de recharge', 'en copropriété'],
+    answer: 'En copropriété, deux solutions existent : une borne individuelle installée sur votre place grâce au droit à la prise, ou une infrastructure collective votée en assemblée générale qui équipe tout le parking. Les projets collectifs peuvent bénéficier de la prime Advenir. AUTO CHARGE89 accompagne copropriétaires et syndics dans toute l’Yonne.',
+    sections: [
+      { h: 'Le droit à la prise : votre borne, sans attendre l’assemblée', p: [
+        'Tout copropriétaire ou locataire disposant d’une place de parking peut faire installer une borne de recharge à ses frais. Il suffit d’informer le syndic par lettre recommandée avec la description des travaux. Le syndic ne peut s’y opposer que pour un motif sérieux et légitime, en saisissant le tribunal judiciaire.',
+        'Nous préparons pour vous le descriptif technique et le schéma à joindre au courrier, puis réalisons l’installation : raccordement à votre compteur ou sur les services généraux avec sous-comptage.',
+      ] },
+      { h: 'L’infrastructure collective : équiper tout le parking', p: [
+        'Pour les résidences où plusieurs résidents roulent électrique, une infrastructure collective est plus rationnelle : un câblage commun dimensionné pour l’avenir, sur lequel chaque résident raccorde sa borne au moment voulu. La gestion des accès par badge et la facturation de chaque utilisateur sont intégrées.',
+        'Nous intervenons en amont de l’assemblée générale : état des lieux, étude de puissance et devis détaillé à présenter aux copropriétaires.',
+      ] },
+      { h: 'Notre accompagnement', list: [
+        'Visite du parking et étude de la puissance disponible',
+        'Dossier technique pour le syndic ou le conseil syndical',
+        'Présentation des solutions individuelles et collectives, chiffrées',
+        'Montage de la demande de prime Advenir pour les projets éligibles',
+        'Installation, mise en service et paramétrage des badges',
+        'Maintenance et dépannage',
+      ] },
+    ],
+    faq: [
+      { q: 'Qui paie la borne en copropriété ?', a: 'Avec le droit à la prise, le demandeur paie son installation. Pour une infrastructure collective, le coût du câblage commun est voté en AG, et chaque résident finance ensuite sa propre borne.' },
+      { q: 'Comment est facturée l’électricité consommée ?', a: 'Soit la borne est raccordée directement au compteur du résident, soit un sous-compteur ou une borne communicante mesure la consommation pour une refacturation exacte.' },
+      { q: 'Combien de temps pour équiper une copropriété ?', a: 'Une borne individuelle se pose en une journée, après le délai d’information du syndic. Un projet collectif dépend du calendrier de l’AG et des éventuels travaux de raccordement.' },
+    ],
+  },
+  entreprise: {
+    metaTitle: 'Borne de recharge entreprise Yonne — Flotte, salariés, clients',
+    metaDesc: 'Bornes de recharge pour entreprises, commerces, domaines et collectivités dans l’Yonne : flotte, parking salariés et visiteurs, badges, supervision, prime Advenir. Installateur IRVE niveau 2.',
+    h1: ['Bornes de recharge', 'pour entreprise'],
+    answer: 'Pour une entreprise dans l’Yonne, AUTO CHARGE89 installe des bornes de 7,4 à 22 kW destinées à la flotte, aux salariés ou à la clientèle, avec gestion par badge, supervision à distance et suivi des consommations. Notre qualification IRVE niveau 2 couvre les bornes accessibles au public et les installations avec communication.',
+    sections: [
+      { h: 'Un projet pensé pour vos usages', p: [
+        'Flotte de véhicules de service qui rentre chaque soir, salariés qui stationnent la journée, clients d’un commerce, d’un hôtel ou d’un domaine viticole : chaque usage appelle une puissance et une gestion différentes. Nous partons de vos besoins réels pour dimensionner le nombre de points de charge et la puissance à répartir.',
+        'Avec la gestion dynamique de l’énergie, plusieurs bornes se partagent la puissance disponible sans dépasser votre abonnement.',
+      ] },
+      { h: 'Bornes ouvertes au public : un service qui attire', p: [
+        'Dans le vignoble de Chablis, autour d’Auxerre ou sur les axes vers Paris, de plus en plus de visiteurs roulent électrique. Une borne sur votre parking devient un argument : les applications de recharge la référencent et vos clients restent plus longtemps.',
+      ] },
+      { h: 'Notre prestation', list: [
+        'Audit du site et étude de puissance',
+        'Bornes murales ou sur pied, 7,4 / 11 / 22 kW, avec badges RFID',
+        'Supervision, suivi de consommation et refacturation des salariés',
+        'Bornes accessibles au public (qualification IRVE niveau 2)',
+        'Accompagnement prime Advenir selon le projet',
+        'Contrat de maintenance et dépannage',
+      ] },
+    ],
+    faq: [
+      { q: 'Les bornes d’entreprise sont-elles éligibles à une aide ?', a: 'Le programme Advenir peut financer une partie de l’installation pour certains projets professionnels (flottes, parkings salariés, bornes ouvertes au public), selon des catégories et des plafonds qui évoluent. Nous vérifions l’éligibilité de votre projet lors du devis.' },
+      { q: 'Peut-on refacturer la recharge aux salariés ?', a: 'Oui. Les bornes communicantes identifient chaque utilisateur par badge et mesurent sa consommation, ce qui permet une refacturation ou un remboursement exact.' },
+      { q: 'Intervenez-vous pour les collectivités ?', a: 'Oui, mairies et communautés de communes de l’Yonne peuvent nous consulter pour équiper un parking public, un atelier municipal ou une flotte de véhicules.' },
+    ],
+  },
+};
+
+export function getStaticPaths() {
+  return Object.entries(SERVICES).map(([key, s]) => ({ params: { service: s.slug }, props: { key } }));
+}
+const { key } = Astro.props as { key: keyof typeof SERVICES };
+const s = SERVICES[key];
+const c = CONTENT[key];
+const others = Object.entries(SERVICES).filter(([k]) => k !== key).map(([, v]) => v);
+const cities = COMMUNES.filter((x) => x.bassinData.focus.includes(key) && (x.type !== 'village')).sort((a, b) => a.km - b.km).slice(0, 18);
+const crumbs = [{ name: 'Accueil', href: '/' }, { name: 'Prestations', href: '/prestations/' }, { name: s.short, href: `/${s.slug}/` }];
+const schema = [
+  {
+    '@type': 'Service',
+    name: s.title,
+    serviceType: 'Installation de borne de recharge pour véhicule électrique',
+    description: c.answer,
+    provider: { '@id': new URL('/#entreprise', Astro.site).href },
+    areaServed: { '@type': 'AdministrativeArea', name: 'Yonne (89)' },
+    url: new URL(`/${s.slug}/`, Astro.site).href,
+  },
+  { '@type': 'FAQPage', mainEntity: c.faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
+];
+---
+<Base title={`${c.metaTitle} | AUTO CHARGE89`} description={c.metaDesc} breadcrumbs={crumbs} schema={schema}>
+  <section class="pagetop">
+    <div class="wrap">
+      <Breadcrumbs items={crumbs} />
+      <h1>{c.h1[0]} <span class="hl">{c.h1[1]}</span> dans l’Yonne</h1>
+      <p class="lead">{s.lead}</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="/contact/">Devis gratuit <Icon name="arrow" /></a>
+        <a class="btn btn-ghost" href={`tel:${SITE.phoneIntl}`}><Icon name="phone" />{SITE.phone}</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap two">
+      <article class="prose">
+        <div class="answer"><span class="lbl">En bref</span><p>{c.answer}</p></div>
+        <Photo name={s.photo} alt={s.photoAlt} eager sizes="(max-width: 900px) 100vw, 55vw" />
+        {c.sections.map((sec) => (
+          <>
+            <h2>{sec.h}</h2>
+            {sec.p?.map((t) => <p>{t}</p>)}
+            {sec.list && <Checks items={sec.list} />}
+          </>
+        ))}
+      </article>
+      <aside class="side">
+        <div class="side-card">
+          <h2>Devis gratuit sous 48 h</h2>
+          <p>Visite technique, devis détaillé, aides comprises. Sans engagement.</p>
+          <Checks items={s.points.slice(0, 3)} />
+          <a class="btn btn-primary" href="/contact/">Demander mon devis</a>
+          <a class="btn btn-ghost" href={`tel:${SITE.phoneIntl}`}><Icon name="phone" />{SITE.phone}</a>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="block alt">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">Méthode</span><h2>Les étapes de votre projet</h2></div>
+      <div class="steps-line charge-line light"></div>
+      <ol class="steps">
+        {STEPS.map((st, i) => <li class="step"><div class="num">{String(i + 1).padStart(2, '0')}</div><h3>{st.t}</h3><p>{st.d}</p></li>)}
+      </ol>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">Questions fréquentes</span><h2>{s.short} : vos questions</h2></div>
+      <Faq items={c.faq} />
+    </div>
+  </section>
+
+  <section class="block alt">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">Près de chez vous</span><h2>{s.short} : nous intervenons à</h2></div>
+      <ul class="chips">
+        {cities.map((x) => <li><a href={communeUrl(x)}>{s.short} à {x.shortName}</a></li>)}
+        <li><a href="/zones-intervention/">Toutes les villes →</a></li>
+      </ul>
+      <div class="sec-head" style="margin-top:50px;margin-bottom:20px"><h2 style="font-size:1.6rem">Nos autres prestations</h2></div>
+      <div class="cards" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
+        {others.map((o) => (
+          <a class="card" href={`/${o.slug}/`}>
+            <Photo name={o.photo} alt={o.photoAlt} sizes="(max-width: 860px) 100vw, 50vw" />
+            <div class="body"><h3>{o.short}</h3><p>{o.teaser}</p><span class="more">Découvrir →</span></div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="block"><div class="wrap"><CtaBand /></div></section>
+</Base>

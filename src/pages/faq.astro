@@ -1,0 +1,20 @@
+---
+import Base from '../layouts/Base.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Faq from '../components/Faq.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { FAQ } from '../data/services.js';
+const crumbs = [{ name: 'Accueil', href: '/' }, { name: 'FAQ', href: '/faq/' }];
+const schema = [{ '@type': 'FAQPage', mainEntity: FAQ.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) }];
+---
+<Base title="FAQ borne de recharge : prix, puissance, aides, copropriété | AUTO CHARGE89" description="Toutes les réponses sur l’installation d’une borne de recharge dans l’Yonne : qualification IRVE, puissance 7,4/11/22 kW, temps de recharge, aides 2026, copropriété, abonnement." breadcrumbs={crumbs} schema={schema}>
+  <section class="pagetop">
+    <div class="wrap">
+      <Breadcrumbs items={crumbs} />
+      <h1>Questions <span class="hl">fréquentes</span></h1>
+      <p class="lead">Les réponses claires d’un installateur IRVE de l’Yonne aux questions qu’on nous pose le plus souvent.</p>
+    </div>
+  </section>
+  <section class="block"><div class="wrap"><Faq items={FAQ} openFirst={false} /></div></section>
+  <section class="block" style="padding-top:0"><div class="wrap"><CtaBand title="Une autre question ?" text="Appelez-nous ou décrivez votre projet, on vous répond sous 48 h." /></div></section>
+</Base>

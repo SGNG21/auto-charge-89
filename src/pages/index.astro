@@ -1,0 +1,134 @@
+---
+import Base from '../layouts/Base.astro';
+import Photo from '../components/Photo.astro';
+import Icon from '../components/Icon.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Faq from '../components/Faq.astro';
+import YonneMap from '../components/YonneMap.astro';
+import { SITE } from '../data/site.js';
+import { SERVICES, STEPS, FAQ } from '../data/services.js';
+import { COMMUNES, communeUrl } from '../data/communes.js';
+
+const faq = FAQ.slice(0, 6);
+const mainCities = COMMUNES.filter((c) => c.type === 'ville' || c.type === 'bourg').sort((a, b) => a.km - b.km);
+const schema = [{
+  '@type': 'FAQPage',
+  mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+}];
+---
+<Base
+  title="Borne de recharge Yonne (89) — Installateur IRVE | AUTO CHARGE89"
+  description="Installation de borne de recharge pour voiture électrique dans l’Yonne : maison, copropriété, entreprise. Artisan certifié IRVE à Brienon-sur-Armançon, intervention à Auxerre, Sens, Joigny… Devis gratuit 48 h."
+  schema={schema}
+>
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <span class="eyebrow">Installateur certifié IRVE · Yonne (89)</span>
+        <h1><span class="kicker">Borne de recharge dans l’Yonne</span>Rechargez<span class="hl">chez vous.</span></h1>
+        <p class="lead">Installation de bornes de recharge pour véhicules électriques — maison, copropriété, entreprise — par un artisan local certifié, basé à Brienon-sur-Armançon.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="/contact/">Demander un devis <Icon name="arrow" /></a>
+          <a class="btn btn-ghost" href={`tel:${SITE.phoneIntl}`}><Icon name="phone" />{SITE.phone}</a>
+        </div>
+        <div class="loc"><Icon name="pin" />Brienon-sur-Armançon et tout le département de l’Yonne</div>
+        <div class="charge-meta">
+          <div class="lbl"><span>Recharge en cours</span><span>100 %</span></div>
+          <div class="charge-line"></div>
+        </div>
+      </div>
+      <Photo name="photo-1" alt="Borne de recharge en charge devant une maison dans l’Yonne" eager widths={[400, 600, 800]} sizes="(max-width: 880px) 100vw, 45vw" />
+    </div>
+  </section>
+
+  <div class="trust">
+    <div class="wrap">
+      <div class="item"><Icon name="shield" /><div><b>Certifié IRVE</b><span>Niveaux 1 et 2</span></div></div>
+      <div class="item"><Icon name="doc" /><div><b>Devis gratuit</b><span>Sous 48 h, sans engagement</span></div></div>
+      <div class="item"><Icon name="pin" /><div><b>Artisan local</b><span>Yonne · 89</span></div></div>
+      <div class="item"><Icon name="euro" /><div><b>TVA 5,5 %</b><span>Taux réduit</span></div></div>
+    </div>
+  </div>
+
+  <section class="block">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow">Nos prestations</span>
+        <h2>Une borne adaptée à votre installation</h2>
+        <p>Étude du tableau électrique, choix de la puissance, pose et mise en service. On s’occupe de tout, dans les règles de l’art et selon la norme NF C 15-100.</p>
+      </div>
+      <div class="cards">
+        {Object.values(SERVICES).map((s) => (
+          <a class="card reveal" href={`/${s.slug}/`}>
+            <Photo name={s.photo} alt={s.photoAlt} sizes="(max-width: 860px) 100vw, 33vw" />
+            <div class="body"><h3>{s.short}</h3><p>{s.teaser}</p><span class="more">En savoir plus →</span></div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="block dark">
+    <div class="wrap two">
+      <div class="reveal">
+        <span class="eyebrow">Pourquoi AUTO CHARGE89</span>
+        <h2 style="font-size:clamp(2rem,4vw,2.8rem);margin:10px 0 16px">L’installateur de bornes de proximité de l’Yonne</h2>
+        <p style="margin-bottom:14px">AUTO CHARGE89 est une entreprise artisanale spécialisée dans l’installation de bornes de recharge (IRVE) pour véhicules électriques et hybrides rechargeables. Basés à Brienon-sur-Armançon, entre Auxerre, Joigny et Saint-Florentin, nous intervenons dans tout le département de l’Yonne.</p>
+        <p>Un seul interlocuteur, de la visite technique à la mise en service : pas de sous-traitance, une installation propre et une attestation de conformité remise à la fin du chantier.</p>
+        <div class="facts">
+          <div class="fact"><b>IRVE</b><span>Niveaux 1 et 2</span></div>
+          <div class="fact"><b>48 h</b><span>Pour recevoir le devis</span></div>
+          <div class="fact"><b>{COMMUNES.length}+</b><span>Villes desservies</span></div>
+          <div class="fact"><b>7,4–22</b><span>kW de puissance</span></div>
+        </div>
+      </div>
+      <div class="reveal"><YonneMap /></div>
+    </div>
+  </section>
+
+  <section class="block alt">
+    <div class="wrap">
+      <div class="sec-head reveal"><span class="eyebrow">Nos réalisations</span><h2>Du travail propre, fait dans les normes</h2><p>Quelques installations récentes dans l’Yonne.</p></div>
+      <div class="gal">
+        <Photo name="photo-6" alt="Connecteur Type 2 branché sur une voiture électrique" class="reveal" sizes="(max-width: 760px) 50vw, 33vw" />
+        <Photo name="photo-11" alt="Borne de recharge allumée de nuit, anneau LED" class="reveal" sizes="(max-width: 760px) 50vw, 33vw" />
+        <Photo name="photo-5" alt="Électricien AUTO CHARGE89 en pleine pose d’une borne" class="reveal" sizes="(max-width: 760px) 50vw, 33vw" />
+      </div>
+      <div class="center mt"><a class="btn btn-line" href="/realisations/">Voir toutes les réalisations</a></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap">
+      <div class="sec-head reveal"><span class="eyebrow">Comment ça marche</span><h2>De l’appel à la première recharge</h2></div>
+      <div class="steps-line charge-line light"></div>
+      <ol class="steps">
+        {STEPS.map((s, i) => <li class="step reveal"><div class="num">{String(i + 1).padStart(2, '0')}</div><h3>{s.t}</h3><p>{s.d}</p></li>)}
+      </ol>
+    </div>
+  </section>
+
+  <section class="block alt">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow">Zones d’intervention</span>
+        <h2>Installation de bornes partout dans l’Yonne</h2>
+        <p>Depuis Brienon-sur-Armançon, nous installons des bornes de recharge dans toutes les communes du département. Choisissez votre ville pour un aperçu local.</p>
+      </div>
+      <ul class="chips reveal">
+        {mainCities.map((c) => <li><a href={communeUrl(c)}>Borne de recharge {c.shortName}</a></li>)}
+      </ul>
+      <div class="center mt"><a class="btn btn-line" href="/zones-intervention/">Toutes les villes desservies</a></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap">
+      <div class="sec-head reveal"><span class="eyebrow">Questions fréquentes</span><h2>Tout savoir avant d’installer votre borne</h2></div>
+      <Faq items={faq} />
+      <div class="mt"><a class="btn btn-line" href="/faq/">Toutes les questions</a></div>
+    </div>
+  </section>
+
+  <section class="block" style="padding-top:0"><div class="wrap"><CtaBand /></div></section>
+</Base>

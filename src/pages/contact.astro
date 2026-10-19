@@ -1,0 +1,36 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import ContactForm from '../components/ContactForm.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { SITE } from '../data/site.js';
+import { COMMUNES, communeUrl } from '../data/communes.js';
+const crumbs = [{ name: 'Accueil', href: '/' }, { name: 'Devis gratuit', href: '/contact/' }];
+const main = COMMUNES.filter((c) => c.type === 'ville').sort((a, b) => a.km - b.km);
+const schema = [{ '@type': 'ContactPage', name: 'Devis gratuit borne de recharge — AUTO CHARGE89', about: { '@id': new URL('/#entreprise', Astro.site).href } }];
+---
+<Base title="Devis gratuit borne de recharge Yonne — Contact | AUTO CHARGE89" description={`Demandez votre devis gratuit pour l’installation d’une borne de recharge dans l’Yonne. Réponse sous 48 h. ☎ ${SITE.phone} — ${SITE.email}. Basé à Brienon-sur-Armançon (89210).`} breadcrumbs={crumbs} schema={schema}>
+  <section class="pagetop">
+    <div class="wrap">
+      <Breadcrumbs items={crumbs} />
+      <h1>Devis <span class="hl">gratuit</span></h1>
+      <p class="lead">Parlez-nous de votre projet, on revient vers vous sous 48 h.</p>
+    </div>
+  </section>
+  <section class="block alt">
+    <div class="wrap cgrid">
+      <div class="zone">
+        <span class="eyebrow">Zone d’intervention</span>
+        <h2>Brienon-sur-Armançon et toute l’Yonne</h2>
+        <p>Basés au cœur du 89, on intervient sur tout le département et ses alentours.</p>
+        <ul class="chips">{main.map((c) => <li><a href={communeUrl(c)}>{c.shortName}</a></li>)}<li><a href="/zones-intervention/">+ toutes les communes</a></li></ul>
+        <div class="direct">
+          <a href={`tel:${SITE.phoneIntl}`}><Icon name="phone" />{SITE.phone}</a>
+          <a href={`mailto:${SITE.email}`}><Icon name="mail" />{SITE.email}</a>
+          <span style="display:flex;align-items:center;gap:11px;font-weight:600"><Icon name="clock" class="" />{SITE.hours}</span>
+        </div>
+      </div>
+      <ContactForm />
+    </div>
+  </section>
+</Base>

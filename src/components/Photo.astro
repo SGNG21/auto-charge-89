@@ -1,0 +1,12 @@
+---
+import { Picture } from 'astro:assets';
+interface Props { name: string; alt: string; class?: string; caption?: string; eager?: boolean; widths?: number[]; sizes?: string }
+const { name, alt, class: cls = '', caption, eager = false, widths = [400, 640, 900], sizes = '(max-width: 860px) 100vw, 50vw' } = Astro.props;
+const images = import.meta.glob<{ default: ImageMetadata }>('../assets/photos/*.jpg', { eager: true });
+const img = images[`../assets/photos/${name}.jpg`]?.default;
+if (!img) throw new Error(`Photo introuvable : ${name}`);
+---
+<figure class={`photo ${cls}`}>
+  <Picture src={img} alt={alt} formats={['avif', 'webp']} widths={[...new Set([...widths.filter((w) => w < img.width), img.width])]} sizes={sizes} loading={eager ? 'eager' : 'lazy'} fetchpriority={eager ? 'high' : 'auto'} decoding="async" quality={72} />
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>

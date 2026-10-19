@@ -1,0 +1,49 @@
+---
+import Base from '../layouts/Base.astro';
+import Photo from '../components/Photo.astro';
+import Icon from '../components/Icon.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Checks from '../components/Checks.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { SITE } from '../data/site.js';
+import { SERVICES, STEPS } from '../data/services.js';
+const crumbs = [{ name: 'Accueil', href: '/' }, { name: 'Prestations', href: '/prestations/' }];
+const schema = [{
+  '@type': 'ItemList',
+  name: 'Prestations AUTO CHARGE89',
+  itemListElement: Object.values(SERVICES).map((s, i) => ({ '@type': 'ListItem', position: i + 1, name: s.title, url: new URL(`/${s.slug}/`, Astro.site).href })),
+}];
+---
+<Base title="Installation borne de recharge Yonne : maison, copropriété, entreprise | AUTO CHARGE89" description="Nos prestations d’installation de bornes de recharge dans l’Yonne (89) : wallbox maison 7,4/11 kW, bornes en copropriété, bornes pour entreprises et flottes. Artisan IRVE, devis gratuit." breadcrumbs={crumbs} schema={schema}>
+  <section class="pagetop">
+    <div class="wrap">
+      <Breadcrumbs items={crumbs} />
+      <h1>Nos <span class="hl">prestations</span></h1>
+      <p class="lead">De la maison individuelle à la flotte d’entreprise : étude, fourniture, pose et mise en service de bornes de recharge dans toute l’Yonne.</p>
+    </div>
+  </section>
+  <section class="block">
+    <div class="wrap">
+      {Object.values(SERVICES).map((s, i) => (
+        <div class={`prow reveal ${i % 2 ? 'rev' : ''}`}>
+          <div class="ptext">
+            <span class="eyebrow">0{i + 1}</span>
+            <h2>{s.short}</h2>
+            <p>{s.lead}</p>
+            <Checks items={s.points} />
+            <p style="margin-top:20px"><a class="btn btn-line" href={`/${s.slug}/`}>Détails : {s.short.toLowerCase()} <Icon name="arrow" /></a></p>
+          </div>
+          <Photo name={s.photo} alt={s.photoAlt} eager={i === 0} />
+        </div>
+      ))}
+    </div>
+  </section>
+  <section class="block alt">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">Comment ça marche</span><h2>De l’appel à la première recharge</h2></div>
+      <div class="steps-line charge-line light"></div>
+      <ol class="steps">{STEPS.map((st, i) => <li class="step"><div class="num">{String(i + 1).padStart(2, '0')}</div><h3>{st.t}</h3><p>{st.d}</p></li>)}</ol>
+    </div>
+  </section>
+  <section class="block"><div class="wrap"><CtaBand /></div></section>
+</Base>

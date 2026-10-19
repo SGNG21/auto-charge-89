@@ -1,0 +1,61 @@
+---
+import Base from '../../layouts/Base.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Photo from '../../components/Photo.astro';
+const crumbs = [{ name: 'Accueil', href: '/' }, { name: 'Guide', href: '/guide/quelle-puissance-borne-recharge/' }, { name: 'Quelle puissance choisir ?', href: '/guide/quelle-puissance-borne-recharge/' }];
+const today = new Date().toISOString().slice(0, 10);
+const schema = [{
+  '@type': 'Article',
+  headline: 'Borne de recharge : 3,7, 7,4, 11 ou 22 kW, quelle puissance choisir ?',
+  description: 'Comparatif des puissances de borne de recharge à domicile, temps de recharge et abonnement nécessaire.',
+  inLanguage: 'fr-FR',
+  datePublished: '2026-10-01',
+  dateModified: today,
+  author: { '@id': new URL('/#entreprise', Astro.site).href },
+  publisher: { '@id': new URL('/#entreprise', Astro.site).href },
+  mainEntityOfPage: new URL('/guide/quelle-puissance-borne-recharge/', Astro.site).href,
+}];
+const rows = [
+  ['Prise renforcée', '3,7 kW', 'Mono', '≈ 20 km', '≈ 8 h 30'],
+  ['Wallbox', '7,4 kW', 'Mono', '≈ 40–50 km', '≈ 4 h 30'],
+  ['Wallbox', '11 kW', 'Tri', '≈ 60–70 km', '≈ 3 h'],
+  ['Borne', '22 kW', 'Tri', '≈ 120 km*', '≈ 1 h 30*'],
+];
+---
+<Base title="Quelle puissance de borne de recharge choisir : 7,4, 11 ou 22 kW ? | AUTO CHARGE89" description="Comparatif clair des puissances de borne de recharge à domicile : temps de recharge, autonomie récupérée par heure, monophasé ou triphasé, abonnement. Conseils d’un installateur IRVE de l’Yonne." breadcrumbs={crumbs} schema={schema} type="article">
+  <section class="pagetop">
+    <div class="wrap">
+      <Breadcrumbs items={crumbs} />
+      <h1>Quelle puissance de borne <span class="hl">choisir ?</span></h1>
+      <p class="lead">3,7, 7,4, 11 ou 22 kW : le comparatif simple pour bien dimensionner votre borne de recharge à domicile.</p>
+    </div>
+  </section>
+  <section class="block">
+    <article class="wrap prose">
+      <div class="answer"><span class="lbl">Réponse courte</span><p>Pour une maison, une borne de <strong>7,4 kW en monophasé</strong> est le meilleur choix dans la grande majorité des cas : elle recharge une batterie de 50 kWh de 20 à 80 % en environ 4 h 30, soit une nuit en heures creuses. Le 11 kW n’a d’intérêt qu’avec une installation triphasée et un véhicule compatible ; le 22 kW est réservé aux usages professionnels.</p></div>
+      <h2>Comparatif des puissances</h2>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Équipement</th><th>Puissance</th><th>Réseau</th><th>Autonomie / heure</th><th>Recharge 20→80 % (50 kWh)</th></tr></thead>
+        <tbody>{rows.map((r) => <tr>{r.map((v) => <td>{v}</td>)}</tr>)}</tbody>
+      </table></div>
+      <p style="font-size:.9rem">Estimations pour une consommation moyenne de 16–18 kWh/100 km. *À 22 kW, la plupart des voitures sont limitées par leur chargeur embarqué (souvent 7,4 ou 11 kW en courant alternatif).</p>
+      <h2>Le chargeur embarqué de votre voiture fixe la limite</h2>
+      <p>En courant alternatif, c’est le chargeur intégré au véhicule qui convertit l’énergie. Si votre voiture accepte 7,4 kW au maximum, une borne de 11 ou 22 kW ne la rechargera pas plus vite. Vérifiez la fiche technique (« puissance de charge AC ») avant de choisir.</p>
+      <h2>Monophasé ou triphasé ?</h2>
+      <p>La plupart des maisons de l’Yonne sont raccordées en monophasé. Dans ce cas, la puissance maximale raisonnable est 7,4 kW (32 A). Passer en triphasé pour installer une borne 11 kW engendre des frais de raccordement et rarement un vrai gain au quotidien : une nuit suffit déjà à recharger avec 7,4 kW.</p>
+      <h2>Et l’abonnement électrique ?</h2>
+      <p>Une borne de 7,4 kW peut fonctionner avec un abonnement de 9 kVA grâce au <strong>pilotage</strong> : la borne réduit automatiquement sa puissance quand le four ou le chauffage tournent. Avec 6 kVA, un passage à 9 kVA est souvent conseillé. Nous vérifions votre situation lors de la visite technique.</p>
+      <Photo name="photo-2" alt="Wallbox 7,4 kW installée sur une maison dans l’Yonne" sizes="(max-width: 900px) 100vw, 72ch" />
+      <h2>Notre recommandation</h2>
+      <ul>
+        <li><strong>Maison, trajets quotidiens &lt; 150 km</strong> : wallbox 7,4 kW pilotée.</li>
+        <li><strong>Maison déjà en triphasé, gros rouleur, véhicule 11 kW</strong> : wallbox 11 kW.</li>
+        <li><strong>Copropriété</strong> : 7,4 kW par place, avec gestion de puissance collective.</li>
+        <li><strong>Entreprise / flotte</strong> : 11 à 22 kW selon la rotation des véhicules.</li>
+      </ul>
+      <p>Voir aussi : <a href="/borne-recharge-maison/">borne de recharge pour maison</a> · <a href="/aides-borne-recharge-2026/">aides 2026</a>.</p>
+    </article>
+  </section>
+  <section class="block" style="padding-top:0"><div class="wrap"><CtaBand title="Besoin d’un conseil personnalisé ?" text="On dimensionne votre borne gratuitement selon votre véhicule et votre installation." /></div></section>
+</Base>

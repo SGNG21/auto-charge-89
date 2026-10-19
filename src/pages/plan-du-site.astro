@@ -1,0 +1,23 @@
+---
+import Base from '../layouts/Base.astro';
+import { SERVICES } from '../data/services.js';
+import { communesByBassin, communeUrl } from '../data/communes.js';
+const bassins = communesByBassin();
+---
+<Base title="Plan du site | AUTO CHARGE89" description="Plan du site AUTO CHARGE89 : prestations, aides, guides et toutes les villes de l’Yonne desservies pour l’installation de bornes de recharge.">
+  <section class="pagetop"><div class="wrap"><h1>Plan du site</h1></div></section>
+  <section class="block"><div class="wrap prose">
+    <h2>Pages principales</h2>
+    <ul>
+      <li><a href="/">Accueil</a></li>
+      <li><a href="/prestations/">Prestations</a><ul>{Object.values(SERVICES).map((s) => <li><a href={`/${s.slug}/`}>{s.title}</a></li>)}</ul></li>
+      <li><a href="/aides-borne-recharge-2026/">Aides 2026</a></li>
+      <li><a href="/guide/quelle-puissance-borne-recharge/">Guide : quelle puissance choisir ?</a></li>
+      <li><a href="/realisations/">Réalisations</a></li>
+      <li><a href="/faq/">FAQ</a></li>
+      <li><a href="/zones-intervention/">Zones d’intervention</a></li>
+      <li><a href="/contact/">Devis gratuit</a></li>
+    </ul>
+    {bassins.map((b) => (<><h2>{b.name}</h2><ul>{b.communes.map((c) => <li><a href={communeUrl(c)}>Borne de recharge {c.shortName} ({c.cp})</a></li>)}</ul></>))}
+  </div></section>
+</Base>

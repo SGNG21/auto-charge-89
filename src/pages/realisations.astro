@@ -1,0 +1,40 @@
+---
+import Base from '../layouts/Base.astro';
+import Photo from '../components/Photo.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+const crumbs = [{ name: 'Accueil', href: '/' }, { name: 'Réalisations', href: '/realisations/' }];
+const items = [
+  { n: 'photo-1', alt: 'Borne de recharge en charge devant une maison', wide: true },
+  { n: 'photo-6', alt: 'Connecteur Type 2 branché sur une voiture électrique' },
+  { n: 'photo-2', alt: 'Wallbox murale sur une maison individuelle' },
+  { n: 'photo-5', alt: 'Électricien en pleine pose d’une borne de recharge' },
+  { n: 'photo-10', alt: 'Perçage et fixation de la borne au mur' },
+  { n: 'photo-9', alt: 'Voiture électrique en charge dans l’allée', wide: true },
+  { n: 'photo-11', alt: 'Borne de recharge allumée de nuit avec anneau LED' },
+  { n: 'photo-3', alt: 'Bornes de recharge en parking de copropriété' },
+  { n: 'photo-4', alt: 'Flotte de véhicules électriques en recharge en entreprise' },
+];
+const schema = [{
+  '@type': 'ImageGallery',
+  name: 'Réalisations AUTO CHARGE89 — bornes de recharge dans l’Yonne',
+  about: { '@id': new URL('/#entreprise', Astro.site).href },
+}];
+---
+<Base title="Réalisations : bornes de recharge installées dans l’Yonne | AUTO CHARGE89" description="Galerie de nos installations de bornes de recharge dans l’Yonne : wallbox en maison, bornes en copropriété et en entreprise. Travail propre et conforme, par un artisan IRVE." breadcrumbs={crumbs} schema={schema}>
+  <section class="pagetop">
+    <div class="wrap">
+      <Breadcrumbs items={crumbs} />
+      <h1>Nos <span class="hl">réalisations</span></h1>
+      <p class="lead">Nos installations de bornes de recharge dans l’Yonne : du travail propre, fait dans les normes.</p>
+    </div>
+  </section>
+  <section class="block">
+    <div class="wrap">
+      <div class="gal">
+        {items.map((it, i) => <Photo name={it.n} alt={it.alt} caption={it.alt} class={`${it.wide ? 'wide' : ''} reveal`} eager={i === 0} sizes={it.wide ? '(max-width: 760px) 100vw, 66vw' : '(max-width: 760px) 50vw, 33vw'} />)}
+      </div>
+    </div>
+  </section>
+  <section class="block alt"><div class="wrap"><CtaBand /></div></section>
+</Base>

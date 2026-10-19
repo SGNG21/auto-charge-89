@@ -1,0 +1,49 @@
+---
+import Base from '../layouts/Base.astro';
+import CtaBand from '../components/CtaBand.astro';
+import YonneMap from '../components/YonneMap.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { COMMUNES, communesByBassin, communeUrl } from '../data/communes.js';
+const crumbs = [{ name: 'Accueil', href: '/' }, { name: 'Zones d’intervention', href: '/zones-intervention/' }];
+const bassins = communesByBassin();
+const schema = [{
+  '@type': 'ItemList',
+  name: 'Villes de l’Yonne desservies par AUTO CHARGE89',
+  numberOfItems: COMMUNES.length,
+  itemListElement: COMMUNES.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: `Borne de recharge ${c.shortName} (${c.cp})`, url: new URL(communeUrl(c), Astro.site).href })),
+}];
+---
+<Base title="Zones d’intervention : borne de recharge dans toute l’Yonne (89) | AUTO CHARGE89" description={`Installation de bornes de recharge dans ${COMMUNES.length}+ villes de l’Yonne : Auxerre, Sens, Joigny, Migennes, Saint-Florentin, Tonnerre, Avallon, Chablis, Toucy… Artisan IRVE basé à Brienon-sur-Armançon.`} breadcrumbs={crumbs} schema={schema}>
+  <section class="pagetop">
+    <div class="wrap">
+      <Breadcrumbs items={crumbs} />
+      <h1>Bornes de recharge dans <span class="hl">toute l’Yonne</span></h1>
+      <p class="lead">Basés à Brienon-sur-Armançon, au centre du département, nous intervenons dans toutes les communes de l’Yonne (89) et en limite des départements voisins.</p>
+    </div>
+  </section>
+  <section class="block dark">
+    <div class="wrap two">
+      <div>
+        <span class="eyebrow">Carte</span>
+        <h2 style="font-size:clamp(1.9rem,3.6vw,2.5rem);margin:10px 0 14px">Une base centrale, tout le 89 à portée</h2>
+        <p style="margin-bottom:14px">Brienon-sur-Armançon se trouve à une vingtaine de minutes de Joigny et de Saint-Florentin, une demi-heure d’Auxerre et environ trois quarts d’heure de Sens. Cette position nous permet de couvrir l’ensemble du département, du Sénonais à l’Avallonnais et de la Puisaye au Tonnerrois.</p>
+        <p>Votre commune n’apparaît pas dans la liste ? Nous y intervenons aussi : <a href="/contact/" style="color:var(--orange-bright);text-decoration:underline">contactez-nous</a>.</p>
+      </div>
+      <YonneMap />
+    </div>
+  </section>
+  <section class="block">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">Par secteur</span><h2>Toutes les villes desservies</h2></div>
+      <div class="bassins">
+        {bassins.map((b) => (
+          <div class="bassin reveal">
+            <h2>{b.name}</h2>
+            <ul class="chips">{b.communes.map((c) => <li><a href={communeUrl(c)}>{c.shortName} <small style="color:var(--ink-soft)">{c.cp}</small></a></li>)}</ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+  <section class="block" style="padding-top:0"><div class="wrap"><CtaBand /></div></section>
+</Base>

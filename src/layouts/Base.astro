@@ -1,0 +1,235 @@
+---
+import '@fontsource/barlow/400.css';
+import '@fontsource/barlow/500.css';
+import '@fontsource/barlow/600.css';
+import '@fontsource/barlow-condensed/600.css';
+import '@fontsource/barlow-condensed/700.css';
+import '@fontsource/barlow-condensed/800.css';
+import '../styles/global.css';
+import Icon from '../components/Icon.astro';
+import { SITE, NAV } from '../data/site.js';
+import { COMMUNES, communeUrl } from '../data/communes.js';
+import { SERVICES } from '../data/services.js';
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  type?: 'website' | 'article';
+  noindex?: boolean;
+  schema?: object[];
+  breadcrumbs?: { name: string; href: string }[];
+}
+const { title, description, image = '/og-auto-charge89.jpg', type = 'website', noindex = false, schema = [], breadcrumbs } = Astro.props;
+const site = Astro.site!;
+const canonical = new URL(Astro.url.pathname, site).href;
+const ogImage = new URL(image, site).href;
+const path = Astro.url.pathname;
+const orgId = new URL('/#entreprise', site).href;
+// Liste détaillée des villes uniquement sur l'accueil et la page zones (évite d'alourdir chaque page).
+const fullArea = path === '/' || path.startsWith('/zones-intervention');
+
+const business = {
+  '@type': ['Electrician', 'LocalBusiness'],
+  '@id': orgId,
+  name: SITE.name,
+  legalName: SITE.legalName,
+  description: SITE.description,
+  slogan: SITE.tagline,
+  url: site.href,
+  logo: new URL('/logo-auto-charge89.png', site).href,
+  image: ogImage,
+  telephone: SITE.phoneIntl,
+  email: SITE.email,
+  priceRange: '€€',
+  currenciesAccepted: 'EUR',
+  paymentAccepted: 'Virement, chèque, carte bancaire',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: SITE.city,
+    postalCode: SITE.postalCode,
+    addressRegion: SITE.region,
+    addressCountry: SITE.country,
+  },
+  geo: { '@type': 'GeoCoordinates', latitude: SITE.geo.lat, longitude: SITE.geo.lon },
+  openingHoursSpecification: [{
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+    opens: '08:00',
+    closes: '19:00',
+  }],
+  areaServed: [
+    { '@type': 'AdministrativeArea', name: 'Yonne', identifier: '89', containedInPlace: { '@type': 'AdministrativeArea', name: SITE.region } },
+    ...(fullArea ? COMMUNES : []).map((c) => ({ '@type': 'City', name: c.shortName, postalCode: c.cp, url: new URL(communeUrl(c), site).href })),
+  ],
+  hasCredential: SITE.certifications.map((name) => ({ '@type': 'EducationalOccupationalCredential', credentialCategory: 'Qualification professionnelle', name })),
+  knowsAbout: ['Borne de recharge', 'Wallbox', 'IRVE', 'Véhicule électrique', 'Recharge en copropriété', 'Droit à la prise', 'Programme Advenir', 'NF C 15-100'],
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Installation de bornes de recharge',
+    itemListElement: Object.values(SERVICES).map((s) => ({
+      '@type': 'Offer',
+      itemOffered: { '@type': 'Service', name: s.title, url: new URL(`/${s.slug}/`, site).href },
+    })),
+  },
+  ...(SITE.sameAs.length ? { sameAs: SITE.sameAs } : {}),
+};
+
+const graph: any[] = [
+  business,
+  { '@type': 'WebSite', '@id': new URL('/#site', site).href, url: site.href, name: SITE.name, inLanguage: 'fr-FR', publisher: { '@id': orgId } },
+  {
+    '@type': 'WebPage',
+    '@id': canonical + '#page',
+    url: canonical,
+    name: title,
+    description,
+    inLanguage: 'fr-FR',
+    isPartOf: { '@id': new URL('/#site', site).href },
+    about: { '@id': orgId },
+    primaryImageOfPage: ogImage,
+    dateModified: new Date().toISOString().slice(0, 10),
+  },
+];
+if (breadcrumbs?.length) {
+  graph.push({
+    '@type': 'BreadcrumbList',
+    itemListElement: breadcrumbs.map((b, i) => ({ '@type': 'ListItem', position: i + 1, name: b.name, item: new URL(b.href, site).href })),
+  });
+}
+graph.push(...schema);
+const jsonLd = JSON.stringify({ '@context': 'https://schema.org', '@graph': graph });
+const topCities = ['auxerre', 'sens', 'joigny', 'migennes', 'saint-florentin', 'tonnerre', 'avallon', 'chablis', 'villeneuve-sur-yonne', 'toucy', 'brienon-sur-armancon', 'pont-sur-yonne']
+  .map((s) => COMMUNES.find((c) => c.slug === s)!)
+  .filter(Boolean);
+const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+---
+<!doctype html>
+<html lang="fr" class="no-js">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'} />
+  <meta name="geo.region" content="FR-89" />
+  <meta name="geo.placename" content={SITE.city} />
+  <meta name="geo.position" content={`${SITE.geo.lat};${SITE.geo.lon}`} />
+  <meta name="ICBM" content={`${SITE.geo.lat}, ${SITE.geo.lon}`} />
+  <meta name="theme-color" content="#0F1B2B" />
+  <meta name="format-detection" content="telephone=yes" />
+  <meta property="og:type" content={type} />
+  <meta property="og:locale" content="fr_FR" />
+  <meta property="og:site_name" content={SITE.name} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="AUTO CHARGE89 — installation de bornes de recharge dans l’Yonne" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={ogImage} />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <link rel="sitemap" href="/sitemap-index.xml" />
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Résumé pour les assistants IA" />
+  <script is:inline>document.documentElement.classList.remove('no-js')</script>
+  <script type="application/ld+json" set:html={jsonLd} />
+</head>
+<body>
+  <a class="skip" href="#contenu">Aller au contenu</a>
+  <header class="site-header">
+    <div class="wrap nav">
+      <a class="brand" href="/" aria-label="AUTO CHARGE89, accueil">
+        <svg class="mark" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+          <circle cx="20" cy="20" r="18" stroke="#ED7D24" stroke-width="2.5"/>
+          <path d="M11 24c0-3 2-5 5-5h7c3 0 5 2 5 5" stroke="#ED7D24" stroke-width="2.2" stroke-linecap="round"/>
+          <circle cx="15" cy="25" r="2.4" fill="#ED7D24"/><circle cx="25" cy="25" r="2.4" fill="#ED7D24"/>
+          <path d="M28 17l3-3m0 0v-3m0 3h3" stroke="#ED7D24" stroke-width="2.2" stroke-linecap="round"/>
+        </svg>
+        <span class="name">AUTO <b>CHARGE89</b><small>Bornes de recharge · Yonne</small></span>
+      </a>
+      <a class="btn btn-primary nav-tel" href={`tel:${SITE.phoneIntl}`} aria-label={`Appeler le ${SITE.phone}`} style="padding:10px 12px;margin-left:auto"><Icon name="phone" /></a>
+      <button class="burger" aria-expanded="false" aria-controls="menu" aria-label="Ouvrir le menu"><Icon name="menu" /></button>
+      <nav class="nav-links" id="menu" aria-label="Navigation principale">
+        {NAV.map((n) => <a href={n.href} aria-current={isActive(n.href) ? 'page' : undefined}>{n.label}</a>)}
+        <a href="/contact/" class="btn btn-primary">Devis gratuit</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenu">
+    <slot />
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="grid">
+        <div>
+          <div class="name">AUTO <b>CHARGE89</b></div>
+          <p style="margin-top:10px;max-width:34ch">Installation de bornes de recharge pour véhicules électriques dans l’Yonne. Entreprise certifiée IRVE niveaux 1 et 2.</p>
+          <address style="font-style:normal;margin-top:14px">
+            <a href={`tel:${SITE.phoneIntl}`} style="color:var(--cream);font-weight:600">{SITE.phone}</a><br />
+            <a href={`mailto:${SITE.email}`}>{SITE.email}</a><br />
+            {SITE.city}, {SITE.postalCode} ({SITE.department})<br />
+            {SITE.hours}
+          </address>
+        </div>
+        <div>
+          <h2>Prestations</h2>
+          <ul>
+            {Object.values(SERVICES).map((s) => <li><a href={`/${s.slug}/`}>{s.short}</a></li>)}
+            <li><a href="/aides-borne-recharge-2026/">Aides 2026</a></li>
+            <li><a href="/guide/quelle-puissance-borne-recharge/">Quelle puissance choisir ?</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2>Infos</h2>
+          <ul>
+            <li><a href="/realisations/">Réalisations</a></li>
+            <li><a href="/faq/">Questions fréquentes</a></li>
+            <li><a href="/zones-intervention/">Zones d’intervention</a></li>
+            <li><a href="/contact/">Devis gratuit</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2>Borne de recharge dans l’Yonne</h2>
+          <ul class="cities">
+            {topCities.map((c) => <li><a href={communeUrl(c)}>{c.shortName}</a></li>)}
+            <li><a href="/zones-intervention/" style="color:var(--orange-bright)">Toutes les villes →</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="legal">
+        <span>© {SITE.year} AUTO CHARGE89 — Installateur IRVE à {SITE.city} (89).</span>
+        <span><a href="/mentions-legales/">Mentions légales</a> · <a href="/politique-confidentialite/">Politique de confidentialité</a> · <a href="/plan-du-site/">Plan du site</a></span>
+      </div>
+    </div>
+  </footer>
+
+  <div class="mbar">
+    <a class="btn btn-ghost" href={`tel:${SITE.phoneIntl}`}><Icon name="phone" />Appeler</a>
+    <a class="btn btn-primary" href="/contact/">Devis gratuit</a>
+  </div>
+
+  <script>
+    const header = document.querySelector('.site-header')!;
+    const burger = header.querySelector('.burger') as HTMLButtonElement;
+    burger.addEventListener('click', () => {
+      const open = header.classList.toggle('open');
+      burger.setAttribute('aria-expanded', String(open));
+      burger.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
+    });
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    }, { rootMargin: '0px 0px -8% 0px' });
+    document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+  </script>
+</body>
+</html>
