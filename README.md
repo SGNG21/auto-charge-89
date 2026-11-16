@@ -14,8 +14,9 @@ npm run build    # génère dist/
 
 1. **Domaine** : définir la variable `SITE_URL` (ex. `https://www.autocharge89.fr`) dans Vercel, ou modifier `astro.config.mjs`. Elle sert aux URL canoniques, au sitemap, à robots.txt, à llms.txt et aux données structurées.
 2. **Formulaire de devis** (`api/contact.js`, envoi par Brevo) :
-   - `BREVO_API_KEY` : clé API Brevo
-   - `BREVO_SENDER` : adresse expéditrice validée dans Brevo
+   - Destinataire fixe : `auto.charge89@gmail.com`
+   - **SMTP OVH** (prioritaire) : `SMTP_USER` (boîte email OVH, ex. contact@auto-charge-89.fr), `SMTP_PASS` (son mot de passe), et en option `SMTP_HOST` (défaut `ssl0.ovh.net`) / `SMTP_PORT` (défaut `465`)
+   - **Brevo** (sinon) : `BREVO_API_KEY` et `BREVO_SENDER` (adresse expéditrice validée dans Brevo)
    Sans ces variables, le formulaire propose un appel ou un email prérempli.
 3. Désactiver la « Vercel Authentication » pour la production si le site doit être public.
 
