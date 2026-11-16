@@ -153,6 +153,7 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
         <span class="name">AUTO <b>CHARGE89</b><small>Bornes de recharge · Yonne</small></span>
       </a>
       <a class="btn btn-primary nav-tel" href={`tel:${SITE.phoneIntl}`} aria-label={`Appeler le ${SITE.phone}`} style="padding:10px 12px;margin-left:auto"><Icon name="phone" /></a>
+      <a class="social social-top" href={SITE.sameAs[0]} target="_blank" rel="noopener me" aria-label="AUTO CHARGE89 sur Facebook" title="Suivez-nous sur Facebook"><Icon name="facebook" /></a>
       <button class="burger" aria-expanded="false" aria-controls="menu" aria-label="Ouvrir le menu"><Icon name="menu" /></button>
       <nav class="nav-links" id="menu" aria-label="Navigation principale">
         {NAV.map((n) => <a href={n.href} aria-current={isActive(n.href) ? 'page' : undefined}>{n.label}</a>)}
