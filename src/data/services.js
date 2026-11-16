@@ -3,8 +3,8 @@ export const SERVICES = {
     slug: 'borne-recharge-maison',
     title: 'Borne de recharge pour maison individuelle',
     short: 'Maison individuelle',
-    photo: 'photo-2',
-    photoAlt: 'Wallbox installée sur le mur d’une maison, voiture électrique branchée',
+    photo: 'photo-15',
+    photoAlt: 'Wallbox murale installée sur une maison, avec câble de charge et prise extérieure',
     teaser: 'Wallbox 7,4 ou 11 kW, recharge pilotée pour optimiser votre abonnement.',
     lead: 'La solution la plus simple : une borne murale (wallbox) chez vous, pour recharger la nuit, tranquillement, au tarif heures creuses.',
     points: [
@@ -19,8 +19,8 @@ export const SERVICES = {
     slug: 'borne-recharge-copropriete',
     title: 'Borne de recharge en copropriété',
     short: 'Copropriété',
-    photo: 'photo-3',
-    photoAlt: 'Bornes de recharge alignées dans le parking couvert d’une copropriété',
+    photo: 'photo-17',
+    photoAlt: 'Tableau de protection de bornes de recharge avec différentiels type B et compteurs d’énergie',
     teaser: 'Solution individuelle ou collective au parking. Éligible au programme Advenir.',
     lead: 'Une borne individuelle à votre place de parking, ou une infrastructure collective pour tout l’immeuble, dans le respect du droit à la prise.',
     points: [
@@ -34,8 +34,8 @@ export const SERVICES = {
     slug: 'borne-recharge-entreprise',
     title: 'Bornes de recharge pour entreprise et flotte',
     short: 'Entreprise & flotte',
-    photo: 'photo-4',
-    photoAlt: 'Véhicules électriques de flotte en charge sur le parking d’une entreprise',
+    photo: 'photo-13',
+    photoAlt: 'Deux bornes de recharge et places réservées sur le parking d’un commerce',
     teaser: 'Parking salariés, flotte ou clients. Supervision, badges, suivi conso.',
     lead: 'Équipez votre parking pour vos salariés, votre flotte ou vos clients, avec supervision, badges et suivi des consommations.',
     points: [
