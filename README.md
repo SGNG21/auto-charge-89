@@ -16,7 +16,6 @@ npm run build    # génère dist/
 2. **Formulaire de devis** (`api/contact.js`, envoi par Brevo) :
    - `BREVO_API_KEY` : clé API Brevo
    - `BREVO_SENDER` : adresse expéditrice validée dans Brevo
-   - `CONTACT_TO` : destinataire (par défaut auto.charge89@gmail.com)
    Sans ces variables, le formulaire propose un appel ou un email prérempli.
 3. Désactiver la « Vercel Authentication » pour la production si le site doit être public.
 

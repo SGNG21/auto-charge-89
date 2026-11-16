@@ -2,7 +2,7 @@
 // Variables d'environnement (Vercel > Settings > Environment Variables) :
 //   BREVO_API_KEY   clé API Brevo (obligatoire)
 //   BREVO_SENDER    email expéditeur validé dans Brevo (ex. contact@votre-domaine.fr)
-//   CONTACT_TO      destinataire des demandes (par défaut auto.charge89@gmail.com)
+//   Destinataire : toujours auto.charge89@gmail.com (fixé dans le code, indépendant des variables d'environnement)
 
 const esc = (s) => String(s ?? '').slice(0, 2000).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const json = (status, body) => new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
@@ -20,7 +20,7 @@ export async function POST(request) {
 
   const key = process.env.BREVO_API_KEY;
   if (!key) return json(503, { error: 'not_configured' });
-  const to = process.env.CONTACT_TO || 'auto.charge89@gmail.com';
+  const to = 'auto.charge89@gmail.com';
   const sender = process.env.BREVO_SENDER || to;
 
   const rows = [
