@@ -6,6 +6,8 @@ import '@fontsource/barlow-condensed/600.css';
 import '@fontsource/barlow-condensed/700.css';
 import '@fontsource/barlow-condensed/800.css';
 import '../styles/global.css';
+import { Image } from 'astro:assets';
+import logo from '../assets/logo.png';
 import Icon from '../components/Icon.astro';
 import { SITE, NAV } from '../data/site.js';
 import { COMMUNES, communeUrl } from '../data/communes.js';
@@ -147,12 +149,7 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
   <header class="site-header">
     <div class="wrap nav">
       <a class="brand" href="/" aria-label="AUTO CHARGE89, accueil">
-        <svg class="mark" viewBox="0 0 40 40" fill="none" aria-hidden="true">
-          <circle cx="20" cy="20" r="18" stroke="#ED7D24" stroke-width="2.5"/>
-          <path d="M11 24c0-3 2-5 5-5h7c3 0 5 2 5 5" stroke="#ED7D24" stroke-width="2.2" stroke-linecap="round"/>
-          <circle cx="15" cy="25" r="2.4" fill="#ED7D24"/><circle cx="25" cy="25" r="2.4" fill="#ED7D24"/>
-          <path d="M28 17l3-3m0 0v-3m0 3h3" stroke="#ED7D24" stroke-width="2.2" stroke-linecap="round"/>
-        </svg>
+        <Image class="mark" src={logo} alt="" width={44} height={44} loading="eager" />
         <span class="name">AUTO <b>CHARGE89</b><small>Bornes de recharge · Yonne</small></span>
       </a>
       <a class="btn btn-primary nav-tel" href={`tel:${SITE.phoneIntl}`} aria-label={`Appeler le ${SITE.phone}`} style="padding:10px 12px;margin-left:auto"><Icon name="phone" /></a>
