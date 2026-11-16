@@ -5,7 +5,9 @@
 //        SMTP_USER  adresse email OVH (ex. contact@auto-charge-89.fr), sert aussi d'expéditeur
 //        SMTP_PASS  mot de passe de cette boîte email
 //        SMTP_HOST  (facultatif) défaut ssl0.ovh.net ; SMTP_PORT (facultatif) défaut 465
-//   2) Brevo (sinon) : BREVO_API_KEY et BREVO_SENDER (expéditeur validé dans Brevo)
+//   2) Resend (sinon) : RESEND_API_KEY et RESEND_FROM (ex. "AUTO CHARGE89 <devis@auto-charge-89.fr>"),
+//        domaine vérifié chez Resend par enregistrements DNS (aucune boîte email nécessaire)
+//   3) Brevo (sinon) : BREVO_API_KEY et BREVO_SENDER (expéditeur validé dans Brevo)
 
 import nodemailer from 'nodemailer';
 
@@ -27,7 +29,8 @@ export async function POST(request) {
   const smtpUser = process.env.SMTP_USER;
   const smtpPass = process.env.SMTP_PASS;
   const key = process.env.BREVO_API_KEY;
-  if (!(smtpUser && smtpPass) && !key) return json(503, { error: 'not_configured' });
+  const resendKey = process.env.RESEND_API_KEY;
+  if (!(smtpUser && smtpPass) && !resendKey && !key) return json(503, { error: 'not_configured' });
   const sender = process.env.BREVO_SENDER || to;
 
   const rows = [
@@ -55,6 +58,22 @@ export async function POST(request) {
     } catch {
       return json(502, { error: 'send_failed' });
     }
+  }
+
+  if (resendKey) {
+    const rr = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${resendKey}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        from: process.env.RESEND_FROM || 'AUTO CHARGE89 <onboarding@resend.dev>',
+        to: [to],
+        ...(replyTo ? { reply_to: replyTo.address } : {}),
+        subject,
+        html,
+      }),
+    });
+    if (!rr.ok) return json(502, { error: 'send_failed' });
+    return json(200, { ok: true });
   }
 
   const r = await fetch('https://api.brevo.com/v3/smtp/email', {
