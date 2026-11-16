@@ -30,7 +30,10 @@ export async function POST(request) {
   const smtpPass = process.env.SMTP_PASS;
   const key = process.env.BREVO_API_KEY;
   const resendKey = process.env.RESEND_API_KEY;
-  if (!(smtpUser && smtpPass) && !resendKey && !key) return json(503, { error: 'not_configured' });
+  if (!(smtpUser && smtpPass) && !resendKey && !key) {
+    console.error('contact: aucune variable d\'envoi définie (RESEND_API_KEY, SMTP_USER/SMTP_PASS ou BREVO_API_KEY)');
+    return json(503, { error: 'not_configured' });
+  }
   const sender = process.env.BREVO_SENDER || to;
 
   const rows = [
@@ -55,7 +58,8 @@ export async function POST(request) {
       });
       await transport.sendMail({ from: { name: 'Site AUTO CHARGE89', address: smtpUser }, to, replyTo, subject, html });
       return json(200, { ok: true });
-    } catch {
+    } catch (e) {
+      console.error('contact: SMTP failed', e?.code, e?.message);
       return json(502, { error: 'send_failed' });
     }
   }
@@ -72,7 +76,10 @@ export async function POST(request) {
         html,
       }),
     });
-    if (!rr.ok) return json(502, { error: 'send_failed' });
+    if (!rr.ok) {
+      console.error('contact: Resend failed', rr.status, (await rr.text()).slice(0, 500));
+      return json(502, { error: 'send_failed' });
+    }
     return json(200, { ok: true });
   }
 
@@ -87,6 +94,9 @@ export async function POST(request) {
       htmlContent: html,
     }),
   });
-  if (!r.ok) return json(502, { error: 'send_failed' });
+  if (!r.ok) {
+    console.error('contact: Brevo failed', r.status, (await r.text()).slice(0, 500));
+    return json(502, { error: 'send_failed' });
+  }
   return json(200, { ok: true });
 }
