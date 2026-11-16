@@ -7,6 +7,7 @@ import '@fontsource/barlow-condensed/700.css';
 import '@fontsource/barlow-condensed/800.css';
 import '../styles/global.css';
 import { Image } from 'astro:assets';
+import CookieBanner from '../components/CookieBanner.astro';
 import logo from '../assets/logo.png';
 import Icon from '../components/Icon.astro';
 import { SITE, NAV } from '../data/site.js';
@@ -207,10 +208,12 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
       </div>
       <div class="legal">
         <span>© {SITE.year} AUTO CHARGE89 — Installateur IRVE à {SITE.city} (89).</span>
-        <span><a href="/mentions-legales/">Mentions légales</a> · <a href="/politique-confidentialite/">Politique de confidentialité</a> · <a href="/plan-du-site/">Plan du site</a></span>
+        <span><a href="/mentions-legales/">Mentions légales</a> · <a href="/politique-confidentialite/">Politique de confidentialité</a> · <a href="#cookies" data-cookie-open>Gérer les cookies</a> · <a href="/plan-du-site/">Plan du site</a></span>
       </div>
     </div>
   </footer>
+
+  <CookieBanner />
 
   <div class="mbar">
     <a class="btn btn-ghost" href={`tel:${SITE.phoneIntl}`}><Icon name="phone" />Appeler</a>
