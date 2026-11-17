@@ -28,6 +28,7 @@ const base = { x: px(SITE.geo.lon), y: py(SITE.geo.lat) };
       const showLabel = isCur || c.type === 'ville';
       return (
         <a href={communeUrl(c)} aria-label={`Borne de recharge à ${c.shortName}`}>
+          <title>{`Borne de recharge à ${c.shortName}`}</title>
           <circle class={isCur ? 'cur' : 'dot'} cx={x} cy={y} r={isCur ? 7 : c.type === 'ville' ? 5 : 3.6} />
           {showLabel && <text class="lbl" x={x + 8} y={y + 4} style={isCur ? 'fill:#fff;font-weight:700;font-size:13px' : ''}>{c.shortName}</text>}
         </a>
