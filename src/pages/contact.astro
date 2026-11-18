@@ -7,9 +7,9 @@ import { SITE } from '../data/site.js';
 import { COMMUNES, communeUrl } from '../data/communes.js';
 const crumbs = [{ name: 'Accueil', href: '/' }, { name: 'Devis gratuit', href: '/contact/' }];
 const main = COMMUNES.filter((c) => c.type === 'ville').sort((a, b) => a.km - b.km);
-const schema = [{ '@type': 'ContactPage', name: 'Devis gratuit borne de recharge — AUTO CHARGE89', about: { '@id': new URL('/#entreprise', Astro.site).href } }];
+const schema = [{ '@type': 'ContactPage', name: 'Devis gratuit borne de recharge | AUTO CHARGE89', about: { '@id': new URL('/#entreprise', Astro.site).href } }];
 ---
-<Base title="Devis gratuit borne de recharge Yonne — Contact | AUTO CHARGE89" description={`Demandez votre devis gratuit pour l’installation d’une borne de recharge dans l’Yonne. Réponse sous 48 h. ☎ ${SITE.phone} — ${SITE.email}. Basé à Brienon-sur-Armançon (89210).`} breadcrumbs={crumbs} schema={schema}>
+<Base title="Devis gratuit borne de recharge Yonne | Contact AUTO CHARGE89" description={`Demandez votre devis gratuit pour l’installation d’une borne de recharge dans l’Yonne. Réponse sous 48 h. ☎ ${SITE.phone}, ${SITE.email}. Basé à Brienon-sur-Armançon (89210).`} breadcrumbs={crumbs} schema={schema}>
   <section class="pagetop">
     <div class="wrap">
       <Breadcrumbs items={crumbs} />
@@ -27,7 +27,7 @@ const schema = [{ '@type': 'ContactPage', name: 'Devis gratuit borne de recharge
         <div class="direct">
           <a href={`tel:${SITE.phoneIntl}`}><Icon name="phone" />{SITE.phone}</a>
           <a href={`mailto:${SITE.email}`}><Icon name="mail" />{SITE.email}</a>
-          <span style="display:flex;align-items:center;gap:11px;font-weight:600"><Icon name="clock" class="" />{SITE.hours}</span>
+          <span class="direct-line"><Icon name="calendar" />{SITE.hours}</span>
         </div>
       </div>
       <ContactForm />

@@ -22,22 +22,77 @@ const { city = '', heading = 'Demandez votre devis gratuit' } = Astro.props;
       </select>
     </div>
     <div class="field"><label for="f-msg">Votre projet</label><textarea id="f-msg" name="message" placeholder="Modèle de voiture, emplacement souhaité, distance au tableau électrique, délai…"></textarea></div>
+    <div class="field upload">
+      <label for="f-photos">Photo de votre tableau électrique <span class="opt">(facultatif)</span></label>
+      <p class="hint">Ouvrez le capot du tableau et prenez-le en photo, bien éclairé : cela nous permet de chiffrer plus précisément votre installation.</p>
+      <input id="f-photos" name="photos_input" type="file" accept="image/*" multiple hidden />
+      <button type="button" class="btn btn-line upload-btn" id="photo-btn"><Icon name="camera" /> Ajouter une photo</button>
+      <ul class="thumbs" id="thumbs" aria-live="polite"></ul>
+    </div>
     <div class="hp" aria-hidden="true"><label>Ne pas remplir <input name="website" tabindex="-1" autocomplete="off" /></label></div>
-    <label class="rgpd"><input type="checkbox" name="consent" required /><span>J’accepte que mes informations soient utilisées pour être recontacté au sujet de ma demande. <a href="/politique-confidentialite/" style="text-decoration:underline">En savoir plus</a></span></label>
+    <label class="rgpd"><input type="checkbox" name="consent" required /><span>J’accepte que mes informations soient utilisées pour être recontacté au sujet de ma demande. <a href="/politique-confidentialite/" style="text-decoration:underline">Politique de confidentialité</a></span></label>
     <button class="btn btn-primary" type="submit">Envoyer ma demande <Icon name="arrow" /></button>
     <p class="form-err" role="alert" hidden></p>
   </form>
   <div class="form-ok" hidden>
     <div class="check"><Icon name="check" /></div>
     <h3>Demande envoyée !</h3>
+    <p class="ok-conf" style="color:var(--ink-soft);margin-bottom:8px" hidden>Un email de confirmation vient de vous être envoyé.</p>
     <p style="color:var(--ink-soft)">Merci, on vous rappelle très vite. Pour une urgence : <a href={`tel:${SITE.phoneIntl}`} style="font-weight:700">{SITE.phone}</a></p>
   </div>
 </div>
 <script>
+  const MAX_PHOTOS = 3;
+  const MAX_DIM = 1600;
+  const MAX_B64 = 1_300_000; // ~1 Mo par photo après compression
   const form = document.getElementById('quote-form') as HTMLFormElement | null;
   if (form) {
     const err = form.querySelector('.form-err') as HTMLElement;
     const ok = form.parentElement!.querySelector('.form-ok') as HTMLElement;
+    const input = document.getElementById('f-photos') as HTMLInputElement;
+    const pickBtn = document.getElementById('photo-btn') as HTMLButtonElement;
+    const thumbs = document.getElementById('thumbs') as HTMLUListElement;
+    const photos: { url: string; b64: string }[] = [];
+
+    // Réduit la photo (taille et poids) avant envoi : un cliché de téléphone fait plusieurs Mo.
+    const compress = async (file: File): Promise<{ url: string; b64: string }> => {
+      const bmp = await createImageBitmap(file);
+      const ratio = Math.min(1, MAX_DIM / Math.max(bmp.width, bmp.height));
+      const c = document.createElement('canvas');
+      c.width = Math.round(bmp.width * ratio);
+      c.height = Math.round(bmp.height * ratio);
+      c.getContext('2d')!.drawImage(bmp, 0, 0, c.width, c.height);
+      let q = 0.78, url = c.toDataURL('image/jpeg', q);
+      while (url.length > MAX_B64 && q > 0.4) { q -= 0.1; url = c.toDataURL('image/jpeg', q); }
+      if (url.length > MAX_B64) throw new Error('too_big');
+      return { url, b64: url.split(',')[1] };
+    };
+    const render = () => {
+      thumbs.innerHTML = '';
+      photos.forEach((p, i) => {
+        const li = document.createElement('li');
+        const img = document.createElement('img');
+        img.src = p.url; img.alt = `Photo ${i + 1}`;
+        const rm = document.createElement('button');
+        rm.type = 'button'; rm.setAttribute('aria-label', `Retirer la photo ${i + 1}`); rm.textContent = '×';
+        rm.addEventListener('click', () => { photos.splice(i, 1); render(); });
+        li.append(img, rm);
+        thumbs.append(li);
+      });
+      pickBtn.hidden = photos.length >= MAX_PHOTOS;
+    };
+    pickBtn.addEventListener('click', () => input.click());
+    input.addEventListener('change', async () => {
+      err.hidden = true;
+      for (const f of Array.from(input.files || [])) {
+        if (photos.length >= MAX_PHOTOS) break;
+        try { photos.push(await compress(f)); }
+        catch { err.textContent = 'Cette photo n’a pas pu être lue. Essayez-en une autre (JPEG ou PNG).'; err.hidden = false; }
+      }
+      input.value = '';
+      render();
+    });
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       err.hidden = true;
@@ -49,12 +104,16 @@ const { city = '', heading = 'Demandez votre devis gratuit' } = Astro.props;
       }
       const btn = form.querySelector('button[type=submit]') as HTMLButtonElement;
       btn.disabled = true;
-      const data = Object.fromEntries(new FormData(form).entries());
+      const data: Record<string, any> = Object.fromEntries(new FormData(form).entries());
+      delete data.photos_input;
       data.page = location.pathname;
+      data.photos = photos.map((p) => ({ type: 'image/jpeg', data: p.b64 }));
       try {
         const r = await fetch('/api/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
         if (!r.ok) throw new Error(String(r.status));
+        const res = await r.json().catch(() => ({}));
         form.hidden = true;
+        (ok.querySelector('.ok-conf') as HTMLElement).hidden = !res.confirmation;
         ok.hidden = false;
         (window as any).dataLayer?.push({ event: 'generate_lead' });
       } catch {

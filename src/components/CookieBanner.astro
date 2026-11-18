@@ -1,0 +1,25 @@
+---
+---
+<div class="cookie" id="cookie-banner" role="dialog" aria-live="polite" aria-label="Cookies" hidden>
+  <p><strong>Cookies</strong> : ce site n’utilise que des cookies indispensables à son fonctionnement et à la mémorisation de votre choix. Aucun cookie publicitaire ni traceur tiers n’est déposé sans votre accord. <a href="/politique-confidentialite/#cookies">Lire la politique de confidentialité</a></p>
+  <div class="cookie-actions">
+    <button type="button" class="btn btn-line" data-cookie="refused">Refuser</button>
+    <button type="button" class="btn btn-primary" data-cookie="accepted">Accepter</button>
+  </div>
+</div>
+<script>
+  const KEY = 'cc_consent';
+  const banner = document.getElementById('cookie-banner') as HTMLElement;
+  const read = () => document.cookie.split('; ').find((c) => c.startsWith(KEY + '='))?.split('=')[1];
+  const save = (v: string) => {
+    // Cookie de 1er niveau, conservé 6 mois (durée recommandée par la CNIL pour mémoriser un choix).
+    document.cookie = `${KEY}=${v}; max-age=${60 * 60 * 24 * 182}; path=/; SameSite=Lax; Secure`;
+    banner.hidden = true;
+    (window as any).dataLayer?.push({ event: 'cookie_consent', consent: v });
+    document.dispatchEvent(new CustomEvent('cookie-consent', { detail: v }));
+  };
+  if (!read()) banner.hidden = false;
+  banner.querySelectorAll<HTMLButtonElement>('[data-cookie]').forEach((b) => b.addEventListener('click', () => save(b.dataset.cookie!)));
+  // Lien « Gérer les cookies » du pied de page : rouvre la bannière.
+  document.querySelectorAll('[data-cookie-open]').forEach((a) => a.addEventListener('click', (e) => { e.preventDefault(); banner.hidden = false; }));
+</script>

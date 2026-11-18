@@ -6,12 +6,17 @@ import { SITE } from '../data/site.js';
   <section class="pagetop"><div class="wrap"><h1>Mentions légales</h1></div></section>
   <section class="block"><div class="wrap prose">
     <h2>Éditeur du site</h2>
-    <p>{SITE.legalName} — entreprise d’installation de bornes de recharge pour véhicules électriques.<br />
-    Siège : {SITE.city}, {SITE.postalCode} ({SITE.department}), France.<br />
-    SIRET : <em>à compléter</em> — Responsable de la publication : <em>à compléter</em>.<br />
-    Téléphone : <a href={`tel:${SITE.phoneIntl}`}>{SITE.phone}</a> — Email : <a href={`mailto:${SITE.email}`}>{SITE.email}</a></p>
+    <p>Ce site est édité par <strong>POLIVIA</strong>, pour le compte de {SITE.legalName}, entreprise d’installation de bornes de recharge pour véhicules électriques.<br />
+    Adresse : 173 rue de Courcelles, 75017 Paris, France.<br />
+    SIREN : 883 243 115 · SIRET : 883 243 115 00036.<br />
+    Responsable de la publication : POLIVIA.<br />
+    Téléphone : <a href="tel:+33698184768">06 98 18 47 68</a> · Email : <a href="mailto:polivia.france@gmail.com">polivia.france@gmail.com</a></p>
+    <p>Entreprise installatrice : {SITE.legalName}, {SITE.city}, {SITE.postalCode} ({SITE.department}), France.<br />
+    Téléphone : <a href={`tel:${SITE.phoneIntl}`}>{SITE.phone}</a> · Email : <a href={`mailto:${SITE.email}`}>{SITE.email}</a></p>
     <h2>Hébergement</h2>
-    <p>Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, États-Unis — vercel.com.</p>
+    <p>Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, États-Unis, vercel.com.</p>
+    <h2>Nom de domaine</h2>
+    <p>OVH SAS, 2 rue Kellermann, 59100 Roubaix, France.</p>
     <h2>Propriété intellectuelle</h2>
     <p>L’ensemble des contenus de ce site (textes, photos, logo) est la propriété de {SITE.legalName}, sauf mention contraire. Toute reproduction sans autorisation est interdite.</p>
     <h2>Responsabilité</h2>

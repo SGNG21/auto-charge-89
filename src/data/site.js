@@ -20,7 +20,8 @@ export const SITE = {
   hours: 'Lundi au samedi, 8 h – 19 h',
   certifications: ['Qualification IRVE niveau 1', 'Qualification IRVE niveau 2'],
   sameAs: [
-    // Ajouter ici la fiche Google Business Profile, Facebook, Instagram, LinkedIn…
+    'https://www.facebook.com/p/Auto-charge-89-61578350309917/',
+    // Ajouter ici la fiche Google Business Profile, Instagram, LinkedIn…
   ],
   year: 2026,
 };

@@ -91,16 +91,16 @@ const schema = [
   },
   { '@type': 'FAQPage', mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
 ];
-const heroPhoto = pick(['photo-1', 'photo-9', 'photo-2', 'photo-11'], 3);
+const heroPhoto = pick(['photo-12', 'photo-15', 'photo-14', 'photo-13'], 3);
 const heroAlt = {
-  'photo-1': `Borne de recharge installée devant une maison, à ${city} et alentours`,
-  'photo-9': `Voiture électrique en charge dans l’allée d’une maison près de ${city}`,
-  'photo-2': `Wallbox murale posée par AUTO CHARGE89, secteur ${city}`,
-  'photo-11': `Borne de recharge allumée de nuit, installation dans l’Yonne près de ${city}`,
+  'photo-12': `Borne de recharge Schneider Electric en charge, installation près de ${city}`,
+  'photo-15': `Wallbox murale posée par AUTO CHARGE89, secteur ${city}`,
+  'photo-14': `Borne de recharge installée sur un bardage bois, secteur ${city}`,
+  'photo-13': `Bornes de recharge et places réservées sur un parking, installation dans l’Yonne près de ${city}`,
 }[heroPhoto]!;
 ---
 <Base
-  title={`Borne de recharge ${city} (${c.cp}) — Installateur IRVE | AUTO CHARGE89`}
+  title={`Borne de recharge ${city} (${c.cp}) : installateur IRVE | AUTO CHARGE89`}
   description={`Installation de borne de recharge à ${city} (${c.cp}) : wallbox maison, copropriété, entreprise. Électricien certifié IRVE ${isBase ? 'basé à Brienon' : `à ${c.km} km`}, devis gratuit sous 48 h, TVA 5,5 %. ☎ ${SITE.phone}`}
   breadcrumbs={crumbs}
   schema={schema}

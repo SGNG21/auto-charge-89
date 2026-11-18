@@ -2,9 +2,9 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
-// URL publique du site : à remplacer par le nom de domaine définitif
-// (ou définir SITE_URL dans les variables d'environnement Vercel).
-const SITE_URL = process.env.SITE_URL || 'https://auto-charge-89.vercel.app';
+// URL publique du site (canonique, sitemap, données structurées).
+// Surchargeable avec SITE_URL, mais le domaine définitif est la valeur par défaut.
+const SITE_URL = process.env.SITE_URL || 'https://www.auto-charge-89.fr';
 
 export default defineConfig({
   site: SITE_URL,
